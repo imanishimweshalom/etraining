@@ -389,7 +389,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: index * 0.15, duration: 0.7, ease: "easeOut" }}
-                whileHover={{ y: -10, shadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
+                whileHover={{ y: -10, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
                 className="group overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 shadow-lg transition-all duration-400"
               >
                 {/* Premium Abstract Visual (replaces image) */}
