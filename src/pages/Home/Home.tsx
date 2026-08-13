@@ -1,14 +1,34 @@
+/**
+ * Home.jsx — eTraining
+ *
+ * Design notes:
+ * - No stock photography anywhere. Every "image" area is a generated
+ *   SVG/CSS diagram built from the training content itself (radar HUD,
+ *   scenario floor-plans, layered environment rings).
+ * - Fonts: Space Grotesk (display), IBM Plex Sans (body), IBM Plex Mono
+ *   (telemetry / coordinate labels). Add to index.html <head>:
+ *
+ *   <link rel="preconnect" href="https://fonts.googleapis.com">
+ *   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+ *
+ * - Palette: void #080B14, panel #0F1526, signal (teal) #46E1D0,
+ *   hazard (amber) #FFB13C, text #F4F6FB / #8B93A8.
+ */
+
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
   ChevronRight,
+  Compass,
   Eye,
   Gamepad2,
   GraduationCap,
   Headset,
   Layers3,
   Play,
+  Radar,
+  Radio,
   ShieldCheck,
   Sparkles,
   Target,
@@ -17,25 +37,45 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+/* ------------------------------------------------------------------ */
+/*  Type tokens (inline so this drops into any Tailwind setup)         */
+/* ------------------------------------------------------------------ */
+
+const fontDisplay = { fontFamily: "'Space Grotesk', sans-serif" };
+const fontBody = { fontFamily: "'IBM Plex Sans', sans-serif" };
+const fontMono = { fontFamily: "'IBM Plex Mono', monospace" };
+
+/* ------------------------------------------------------------------ */
+/*  Content                                                            */
+/* ------------------------------------------------------------------ */
+
 const trainingAreas = [
   {
+    tag: "N-01",
     title: "VR Safety Simulation",
-    description: "Immersive virtual environments for workplace safety education.",
+    description:
+      "Explore workplace safety situations through immersive virtual environments.",
     icon: ShieldCheck,
   },
   {
+    tag: "N-02",
     title: "Interactive Scenarios",
-    description: "Decision-making within dynamic, true-to-life workplace scenarios.",
+    description:
+      "Make decisions inside practical scenarios and understand the consequences.",
     icon: Target,
   },
   {
+    tag: "N-03",
     title: "Immersive Learning",
-    description: "Visual learning experiences through interactive virtual environments.",
+    description:
+      "Experience learning content through interactive visual environments.",
     icon: Headset,
   },
   {
+    tag: "N-04",
     title: "Practical Skills",
-    description: "Connecting core concepts to practical workplace situations.",
+    description:
+      "Connect learning concepts with situations that can happen in real workplaces.",
     icon: Layers3,
   },
 ];
@@ -44,122 +84,482 @@ const features = [
   {
     icon: Headset,
     title: "Virtual Reality",
-    description: "Immersive environments designed for comprehensive simulations.",
+    description:
+      "A learning experience designed around immersive environments and simulations.",
   },
   {
     icon: Gamepad2,
     title: "Interactive",
-    description: "Exploration-based activities with decision-making pathways.",
+    description:
+      "Learning activities can involve exploration, decisions and practical scenarios.",
   },
   {
     icon: Eye,
     title: "Visual Learning",
-    description: "Understanding concepts through compelling visual storytelling.",
+    description:
+      "Understand concepts through visual environments rather than text alone.",
   },
   {
     icon: Zap,
     title: "Practical Focus",
-    description: "Knowledge and skills directly applicable to real-world tasks.",
+    description:
+      "Focus on knowledge and skills that can be connected to real situations.",
   },
 ];
 
-const vrScenes = [
+const vrScenes: {
+  title: string;
+  description: string;
+  coord: string;
+  variant: "construction" | "workplace" | "education";
+}[] = [
   {
     title: "Construction Safety",
-    description: "Identify hazards and practices in a virtual construction zone.",
-    abstractVisual: (
-      <div className="relative h-64 bg-[#0a1120] overflow-hidden">
-        <div className="absolute -left-16 bottom-0 w-80 h-64 bg-cyan-950/40 rounded-full blur-3xl opacity-60"></div>
-        <div className="absolute top-12 left-20 w-32 h-32 rounded-lg bg-cyan-900 border-2 border-cyan-800 rotate-12 flex items-center justify-center shadow-lg shadow-cyan-950/50">
-          <Layers3 className="w-12 h-12 text-cyan-500 opacity-80" />
-        </div>
-        <div className="absolute top-32 left-44 w-28 h-28 rounded-lg bg-blue-900/80 border-2 border-blue-800 -rotate-6 flex items-center justify-center shadow-lg shadow-blue-950/60">
-          <ShieldCheck className="w-10 h-10 text-blue-500 opacity-90" />
-        </div>
-        <div className="absolute -bottom-8 -right-10 w-48 h-48 rounded-full border-[10px] border-slate-700/50"></div>
-      </div>
-    ),
+    description:
+      "Explore hazards and safe practices inside a virtual construction environment.",
+    coord: "SITE // 41.2",
+    variant: "construction",
   },
   {
     title: "Workplace Training",
-    description: "Engage in practical workplace scenarios using immersive tech.",
-    abstractVisual: (
-      <div className="relative h-64 bg-[#0a1120] overflow-hidden">
-        <div className="absolute right-[-30px] top-[40px] w-64 h-64 bg-blue-950/50 rounded-full blur-3xl opacity-50"></div>
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-48 h-32 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center gap-3 p-4 shadow-xl">
-          <div className="w-10 h-10 rounded-full bg-cyan-600 flex items-center justify-center">
-            <Users className="w-5 h-5 text-white" />
-          </div>
-          <div className="flex-1 space-y-1.5">
-            <div className="h-2 w-full bg-slate-600 rounded"></div>
-            <div className="h-2 w-3/4 bg-slate-700 rounded"></div>
-          </div>
-        </div>
-        <div className="absolute bottom-10 left-10 w-24 h-24 rounded-lg bg-cyan-900/60 border-2 border-cyan-800 rotate-12 shadow-lg"></div>
-      </div>
-    ),
+    description:
+      "Experience practical workplace learning through immersive technology.",
+    coord: "FLOOR // 08.5",
+    variant: "workplace",
   },
   {
     title: "Immersive Education",
-    description: "A transformative approach to learning using virtual experiences.",
-    abstractVisual: (
-      <div className="relative h-64 bg-[#0a1120] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.12),transparent_70%)]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-4">
-          <div className="w-20 h-28 rounded-lg bg-blue-900 border-2 border-blue-800 rotate-[-15deg] shadow-2xl flex items-center justify-center">
-            <GraduationCap className="w-10 h-10 text-blue-400 opacity-80" />
-          </div>
-          <div className="w-20 h-28 rounded-lg bg-cyan-900 border-2 border-cyan-800 rotate-[10deg] mt-6 shadow-2xl flex items-center justify-center">
-            <Gamepad2 className="w-10 h-10 text-cyan-400 opacity-80" />
-          </div>
-        </div>
-        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-96 h-32 bg-slate-800/80 rounded-t-full border border-slate-700"></div>
-      </div>
-    ),
+    description:
+      "Discover a different way of learning using virtual environments.",
+    coord: "LAYER // 03.1",
+    variant: "education",
   },
 ];
 
+const journey = [
+  {
+    phase: "PHASE — 01",
+    icon: GraduationCap,
+    title: "Learn",
+    text: "Understand concepts through structured learning content.",
+  },
+  {
+    phase: "PHASE — 02",
+    icon: Headset,
+    title: "Experience",
+    text: "Explore immersive and interactive environments.",
+  },
+  {
+    phase: "PHASE — 03",
+    icon: Target,
+    title: "Practice",
+    text: "Apply knowledge through practical scenarios.",
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/*  Signature visual — scenario HUD radar (hero)                       */
+/* ------------------------------------------------------------------ */
+
+function ScenarioHUD() {
+  const nodes = [
+    { x: 240, y: 90, label: "A1", risk: "hazard" },
+    { x: 130, y: 200, label: "B4", risk: "signal" },
+    { x: 330, y: 230, label: "C2", risk: "signal" },
+    { x: 220, y: 320, label: "D7", risk: "hazard" },
+  ];
+
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F1526] p-2 shadow-2xl">
+      <div className="relative overflow-hidden rounded-[1.5rem] bg-[#0B1120]">
+        <svg viewBox="0 0 460 460" className="h-[520px] w-full">
+          <defs>
+            <radialGradient id="hudGlow" cx="50%" cy="42%" r="60%">
+              <stop offset="0%" stopColor="#46E1D0" stopOpacity="0.16" />
+              <stop offset="100%" stopColor="#46E1D0" stopOpacity="0" />
+            </radialGradient>
+            <pattern
+              id="hudGrid"
+              width="23"
+              height="23"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 23 0 L 0 0 0 23"
+                fill="none"
+                stroke="#46E1D0"
+                strokeOpacity="0.06"
+                strokeWidth="1"
+              />
+            </pattern>
+          </defs>
+
+          <rect width="460" height="460" fill="url(#hudGrid)" />
+          <rect width="460" height="460" fill="url(#hudGlow)" />
+
+          {/* concentric scan rings */}
+          <g transform="translate(230,215)">
+            {[150, 110, 70].map((r) => (
+              <circle
+                key={r}
+                r={r}
+                fill="none"
+                stroke="#46E1D0"
+                strokeOpacity="0.16"
+                strokeWidth="1"
+              />
+            ))}
+            <line x1="-170" y1="0" x2="170" y2="0" stroke="#46E1D0" strokeOpacity="0.14" />
+            <line x1="0" y1="-170" x2="0" y2="170" stroke="#46E1D0" strokeOpacity="0.14" />
+
+            {/* animated sweep */}
+            <motion.g
+              animate={{ rotate: 360 }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              style={{ transformOrigin: "0px 0px" }}
+            >
+              <path
+                d="M 0 0 L 0 -150 A 150 150 0 0 1 106 -106 Z"
+                fill="#46E1D0"
+                opacity="0.08"
+              />
+            </motion.g>
+          </g>
+
+          {/* hazard / signal nodes */}
+          {nodes.map((n) => (
+            <g key={n.label} transform={`translate(${n.x},${n.y})`}>
+              <motion.circle
+                r="16"
+                fill="none"
+                stroke={n.risk === "hazard" ? "#FFB13C" : "#46E1D0"}
+                strokeWidth="1.5"
+                animate={{ r: [16, 24, 16], opacity: [0.6, 0, 0.6] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
+              />
+              <circle
+                r="5"
+                fill={n.risk === "hazard" ? "#FFB13C" : "#46E1D0"}
+              />
+              <text
+                x="14"
+                y="4"
+                fill={n.risk === "hazard" ? "#FFB13C" : "#8FF3E6"}
+                fontSize="11"
+                style={fontMono}
+              >
+                {n.label}
+              </text>
+            </g>
+          ))}
+        </svg>
+
+        {/* telemetry readout */}
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-6">
+          <div
+            className="flex items-center gap-2 rounded-full border border-white/10 bg-[#080B14]/70 px-3 py-1.5 text-[11px] text-[#8FF3E6] backdrop-blur"
+            style={fontMono}
+          >
+            <Radio className="h-3.5 w-3.5" />
+            SCENARIO LIVE
+          </div>
+          <div
+            className="rounded-full border border-white/10 bg-[#080B14]/70 px-3 py-1.5 text-[11px] text-slate-400 backdrop-blur"
+            style={fontMono}
+          >
+            NODES: 04
+          </div>
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+          <div className="rounded-2xl border border-white/10 bg-[#080B14]/80 p-5 backdrop-blur-xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#46E1D0]/10 text-[#46E1D0]">
+                <Headset className="h-6 w-6" />
+              </div>
+              <div>
+                <p
+                  className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#46E1D0]"
+                  style={fontMono}
+                >
+                  Hazard scan · Construction site
+                </p>
+                <h2 className="mt-1 text-lg font-bold text-white" style={fontDisplay}>
+                  Two risk nodes flagged
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <motion.div
+          animate={{ scale: [1, 1.06, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute left-1/2 top-[42%] flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-xl"
+        >
+          <Play className="ml-1 h-6 w-6 fill-white" />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scenario diagrams — one distinct pattern per training scene        */
+/* ------------------------------------------------------------------ */
+
+type ScenarioVariant = "construction" | "workplace" | "education";
+
+function ScenarioDiagram({ variant }: { variant: ScenarioVariant }) {
+  if (variant === "construction") {
+    return (
+      <svg viewBox="0 0 400 260" className="h-64 w-full">
+        <rect width="400" height="260" fill="#0B1120" />
+        {Array.from({ length: 7 }).map((_, i) => (
+          <line
+            key={`v${i}`}
+            x1={30 + i * 55}
+            y1="20"
+            x2={30 + i * 55}
+            y2="240"
+            stroke="#FFB13C"
+            strokeOpacity="0.12"
+          />
+        ))}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <line
+            key={`h${i}`}
+            x1="20"
+            y1={40 + i * 45}
+            x2="380"
+            y2={40 + i * 45}
+            stroke="#FFB13C"
+            strokeOpacity="0.12"
+          />
+        ))}
+        {/* scaffold uprights */}
+        {[85, 195, 305].map((x, i) => (
+          <g key={x}>
+            <line x1={x} y1="55" x2={x} y2="225" stroke="#46E1D0" strokeOpacity="0.35" strokeWidth="2" />
+            <line x1={x - 40} y1="140" x2={x + 40} y2="140" stroke="#46E1D0" strokeOpacity="0.25" />
+            <motion.circle
+              cx={x}
+              cy={80 + i * 35}
+              r="6"
+              fill="#FFB13C"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.3 }}
+            />
+          </g>
+        ))}
+      </svg>
+    );
+  }
+
+  if (variant === "workplace") {
+    return (
+      <svg viewBox="0 0 400 260" className="h-64 w-full">
+        <rect width="400" height="260" fill="#0B1120" />
+        {Array.from({ length: 4 }).map((_, row) => (
+          <g key={row}>
+            {Array.from({ length: 6 }).map((_, col) => (
+              <rect
+                key={col}
+                x={22 + col * 62}
+                y={20 + row * 58}
+                width="46"
+                height="40"
+                rx="4"
+                fill="none"
+                stroke="#46E1D0"
+                strokeOpacity="0.18"
+              />
+            ))}
+          </g>
+        ))}
+        {[
+          [53, 40],
+          [239, 98],
+          [363, 156],
+          [115, 214],
+        ].map(([x, y], i) => (
+          <motion.circle
+            key={i}
+            cx={x}
+            cy={y}
+            r="5"
+            fill="#46E1D0"
+            animate={{ r: [5, 9, 5], opacity: [1, 0.4, 1] }}
+            transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.4 }}
+          />
+        ))}
+      </svg>
+    );
+  }
+
+  // education — layered holographic rings
+  return (
+    <svg viewBox="0 0 400 260" className="h-64 w-full">
+      <rect width="400" height="260" fill="#0B1120" />
+      <g transform="translate(200,130)">
+        {[100, 70, 40].map((r, i) => (
+          <motion.ellipse
+            key={r}
+            rx={r}
+            ry={r * 0.4}
+            fill="none"
+            stroke="#46E1D0"
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8 + i * 4, repeat: Infinity, ease: "linear" }}
+            style={{ transformOrigin: "0px 0px" }}
+          />
+        ))}
+        <circle r="6" fill="#FFB13C" />
+      </g>
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Layered environment panel (training areas section)                 */
+/* ------------------------------------------------------------------ */
+
+function LayeredEnvironment() {
+  const layers = [
+    { r: 190, label: "MASTERY", delay: 0 },
+    { r: 145, label: "FEEDBACK", delay: 0.15 },
+    { r: 100, label: "INTERACTION", delay: 0.3 },
+    { r: 55, label: "SIMULATION", delay: 0.45 },
+  ];
+
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0F1526] p-2">
+      <div className="relative overflow-hidden rounded-[1.5rem] bg-[#0B1120]">
+        <svg viewBox="0 0 460 580" className="h-[580px] w-full">
+          <defs>
+            <radialGradient id="layerGlow" cx="50%" cy="45%" r="55%">
+              <stop offset="0%" stopColor="#46E1D0" stopOpacity="0.14" />
+              <stop offset="100%" stopColor="#46E1D0" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <rect width="460" height="580" fill="url(#layerGlow)" />
+
+          <g transform="translate(230,260)">
+            {layers.map((l) => (
+              <motion.circle
+                key={l.label}
+                r={l.r}
+                fill="none"
+                stroke="#46E1D0"
+                strokeOpacity="0.22"
+                strokeWidth="1"
+                strokeDasharray="3 6"
+                animate={{ rotate: 360 }}
+                transition={{
+                  duration: 30 + l.r,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{ transformOrigin: "0px 0px" }}
+              />
+            ))}
+            <circle r="30" fill="#46E1D0" fillOpacity="0.12" stroke="#46E1D0" strokeOpacity="0.5" />
+            <Headset x="-14" y="-14" width="28" height="28" color="#46E1D0" />
+
+            {layers.map((l) => (
+              <text
+                key={l.label}
+                x="6"
+                y={-l.r - 8}
+                fill="#5B6478"
+                fontSize="10"
+                style={fontMono}
+                letterSpacing="1.5"
+              >
+                {l.label}
+              </text>
+            ))}
+          </g>
+        </svg>
+
+        <div className="absolute bottom-5 left-5 right-5">
+          <div className="rounded-2xl border border-white/10 bg-[#080B14]/80 p-5 backdrop-blur-xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFB13C]/10 text-[#FFB13C]">
+                <GraduationCap className="h-6 w-6" />
+              </div>
+              <div>
+                <p
+                  className="text-[11px] uppercase tracking-[0.22em] text-[#FFB13C]"
+                  style={fontMono}
+                >
+                  Learning technology
+                </p>
+                <p className="mt-1 font-bold text-white" style={fontDisplay}>
+                  From information to experience
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page                                                                */
+/* ------------------------------------------------------------------ */
+
 export default function Home() {
   return (
-    <main className="overflow-hidden bg-[#0a1120] text-slate-100 font-sans">
+    <main className="overflow-hidden bg-[#080B14] text-white" style={fontBody}>
       {/* =====================================================
           HERO
       ====================================================== */}
       <section className="relative min-h-screen pt-24">
-        {/* Advanced Background Glows */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-[-15%] top-[10%] h-[500px] w-[500px] rounded-full bg-cyan-600/10 blur-[130px] opacity-80" />
-          <div className="absolute right-[-10%] top-[20%] h-[600px] w-[600px] rounded-full bg-blue-700/10 blur-[160px] opacity-90" />
-          <div className="absolute bottom-[-10%] left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-600/10 blur-[150px]" />
+          <div className="absolute left-[-10%] top-[15%] h-[400px] w-[400px] rounded-full bg-[#46E1D0]/10 blur-[120px]" />
+          <div className="absolute right-[-10%] top-[25%] h-[500px] w-[500px] rounded-full bg-[#1E3A5F]/20 blur-[140px]" />
+          <div className="absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-[#FFB13C]/5 blur-[130px]" />
         </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-32">
-          {/* Hero text */}
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-28">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8 }}
           >
-            <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-cyan-600/30 bg-cyan-950/40 px-5 py-2.5 text-sm font-semibold text-cyan-300 backdrop-blur-lg shadow-sm">
+            <div
+              className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#46E1D0]/20 bg-[#46E1D0]/5 px-4 py-2 text-sm font-medium text-[#46E1D0] backdrop-blur"
+              style={fontMono}
+            >
               <Sparkles className="h-4 w-4" />
-              Next-Generation Immersive Learning
+              Immersive practical learning
             </div>
 
-            <h1 className="max-w-4xl text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-              Learning that transcends the
-              <span className="block mt-1.5 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                physical classroom.
+            <h1
+              className="max-w-3xl text-5xl font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl"
+              style={fontDisplay}
+            >
+              Learn beyond the
+              <span className="block bg-gradient-to-r from-[#46E1D0] via-[#5FC6E8] to-[#8FA6FF] bg-clip-text text-transparent">
+                classroom.
               </span>
             </h1>
 
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
-              eTraining reimagines professional education, utilizing cutting-edge virtual reality, interactive concepts, and true-to-life scenarios for unparalleled engagement.
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
+              eTraining brings practical education closer to learners through
+              interactive experiences, virtual reality concepts and real-world
+              scenarios.
             </p>
 
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 to="/trainings"
-                className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-slate-50 px-8 py-4 font-bold text-slate-950 transition-all duration-300 hover:bg-cyan-300 hover:shadow-cyan-950/30 hover:shadow-lg"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-bold text-[#080B14] transition-all duration-300 hover:-translate-y-1 hover:bg-[#46E1D0]"
               >
                 Explore Training
                 <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -167,104 +567,49 @@ export default function Home() {
 
               <Link
                 to="/how-it-works"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/40 px-8 py-4 font-semibold text-slate-200 backdrop-blur-lg transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-4 font-semibold text-white backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/10"
               >
                 How It Works
-                <ChevronRight className="h-5 w-5 text-slate-400" />
+                <ChevronRight className="h-5 w-5" />
               </Link>
             </div>
 
-            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4">
-              {[
-                "Interactive scenarios",
-                "Virtual environments",
-                "Practical skill application",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-2.5 text-sm font-medium text-slate-400"
-                >
-                  <CheckCircle2 className="h-4 w-4 text-cyan-500" />
-                  {item}
-                </div>
-              ))}
+            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3">
+              {["Interactive scenarios", "Virtual environments", "Practical learning"].map(
+                (item) => (
+                  <div key={item} className="flex items-center gap-2 text-sm text-slate-400">
+                    <CheckCircle2 className="h-4 w-4 text-[#46E1D0]" />
+                    {item}
+                  </div>
+                )
+              )}
             </div>
           </motion.div>
 
-          {/* Premium Hero Illustration (replaces image) */}
+          {/* Hero signature visual — scenario HUD, no photography */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, rotate: 2 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
             className="relative"
           >
-            <div className="absolute -inset-10 rounded-[4rem] bg-cyan-600/15 blur-[50px] opacity-70" />
+            <div className="absolute -inset-8 rounded-[3rem] bg-[#46E1D0]/10 blur-3xl" />
+            <ScenarioHUD />
 
-            {/* Illustration Canvas */}
-            <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-700 bg-slate-900/60 p-3 shadow-2xl backdrop-blur-sm">
-              <div className="relative h-[560px] w-full rounded-[2rem] bg-[#0d1526] overflow-hidden flex items-center justify-center">
-                
-                {/* Simplified VR headset illustration */}
-                <div className="relative w-72 h-44 bg-slate-800 rounded-3xl border border-slate-700 flex flex-col p-5 shadow-inner">
-                  <div className="w-16 h-1.5 bg-cyan-500 rounded-full mx-auto"></div>
-                  <div className="mt-4 flex gap-3 justify-center">
-                    <div className="w-10 h-10 rounded-full bg-slate-700 border border-slate-600"></div>
-                    <div className="w-10 h-10 rounded-full bg-slate-700 border border-slate-600"></div>
-                  </div>
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-8 bg-slate-700 rounded-b-2xl border border-slate-600"></div>
-                </div>
-
-                {/* Animated UI elements around headset */}
-                <motion.div
-                  animate={{ y: [0, -15, 0], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-24 left-16 w-16 h-16 bg-cyan-900/60 rounded-xl border border-cyan-700 flex items-center justify-center shadow-lg shadow-cyan-950/40"
-                >
-                  <Target className="w-7 h-7 text-cyan-400" />
-                </motion.div>
-                <motion.div
-                  animate={{ x: [0, 15, 0], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="absolute bottom-32 right-20 w-14 h-14 bg-blue-900/60 rounded-xl border border-blue-700 flex items-center justify-center shadow-lg shadow-blue-950/40"
-                >
-                  <Zap className="w-6 h-6 text-blue-400" />
-                </motion.div>
-                
-                {/* Center play button */}
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{
-                    duration: 2.8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-600 bg-slate-800/60 text-slate-100 shadow-2xl backdrop-blur-xl group cursor-pointer hover:bg-slate-800/80 hover:border-slate-500"
-                >
-                  <Play className="ml-1.5 h-9 w-9 fill-slate-100" />
-                </motion.div>
-
-                {/* Subdued Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1120] via-transparent to-[#0a1120]/40" />
-              </div>
-            </div>
-
-            {/* Subdued Floating VR card */}
             <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute -left-8 top-28 hidden rounded-2xl border border-slate-700 bg-slate-900/90 p-5 shadow-xl backdrop-blur-xl sm:block"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -left-5 top-20 hidden rounded-2xl border border-white/10 bg-[#0F1526]/90 p-4 shadow-2xl backdrop-blur-xl sm:block"
             >
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-950/60 text-cyan-400 border border-cyan-800">
-                  <Headset className="h-6 w-6" />
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#46E1D0]/10 text-[#46E1D0]">
+                  <Radar className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-base font-bold text-slate-100">Immersive VR</p>
-                  <p className="text-sm text-slate-400">Experience-based learning</p>
+                  <p className="text-sm font-bold">VR Training</p>
+                  <p className="text-xs text-slate-500" style={fontMono}>
+                    Live scenario feed
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -275,30 +620,33 @@ export default function Home() {
       {/* =====================================================
           INTRO
       ====================================================== */}
-      <section className="border-y border-slate-800 bg-slate-900/30">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[2fr_1fr] items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-                A transformative approach
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <p
+                className="text-sm font-semibold uppercase tracking-[0.22em] text-[#46E1D0]"
+                style={fontMono}
+              >
+                A different way to learn
               </p>
-
-              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-                Convert learning into an active experience.
+              <h2 className="mt-4 max-w-3xl text-3xl font-bold leading-tight sm:text-4xl" style={fontDisplay}>
+                Turn learning into an experience.
               </h2>
-
-              <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-400">
-                Move beyond passive content consumption. Our platform empowers learners to explore interactive modules and simulations, making intricate practical concepts intuitively understandable.
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-400">
+                Instead of only reading about a situation, learners can
+                explore interactive content and simulations designed to make
+                practical concepts easier to understand.
               </p>
             </div>
 
             <div className="flex items-center lg:justify-end">
               <Link
                 to="/trainings"
-                className="group inline-flex items-center gap-3 rounded-xl border border-cyan-800 bg-cyan-950/60 px-6 py-4 font-semibold text-cyan-300 transition-all hover:bg-cyan-950 hover:border-cyan-700 hover:shadow-cyan-950/20 hover:shadow-md"
+                className="group inline-flex items-center gap-2 rounded-xl border border-[#46E1D0]/20 bg-[#46E1D0]/5 px-5 py-3 font-semibold text-[#46E1D0] transition hover:bg-[#46E1D0]/10"
               >
-                Start Exploring
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1.5" />
+                Start exploring
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
@@ -308,44 +656,40 @@ export default function Home() {
       {/* =====================================================
           FEATURES
       ====================================================== */}
-      <section className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
         <div className="text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-            Platform Capabilities
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#46E1D0]" style={fontMono}>
+            Platform experience
           </p>
-
-          <h2 className="mt-5 text-4xl font-extrabold sm:text-5xl">
-            Engineered for deeper engagement
+          <h2 className="mt-4 text-3xl font-bold sm:text-4xl" style={fontDisplay}>
+            Built for interactive learning
           </h2>
-
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-400">
-            Discover a comprehensive learning ecosystem built on interactive environments, critical scenarios, and rich visual narratives.
+          <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
+            Explore learning through virtual environments, practical
+            scenarios and visual experiences.
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => {
             const Icon = feature.icon;
-
             return (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-                whileHover={{ y: -8, borderColor: 'rgba(34, 211, 238, 0.25)', backgroundColor: 'rgba(255, 255, 255, 0.04)'}}
-                className="group rounded-3xl border border-slate-800 bg-slate-900/40 p-8 transition-all duration-300"
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                whileHover={{ y: -7 }}
+                className="group rounded-2xl border border-white/10 bg-white/[0.025] p-6 transition-all duration-300 hover:border-[#46E1D0]/20 hover:bg-white/[0.04]"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-800 transition group-hover:bg-cyan-900 group-hover:scale-105">
-                  <Icon className="h-7 w-7" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#46E1D0]/10 text-[#46E1D0] transition group-hover:bg-[#46E1D0]/20">
+                  <Icon className="h-6 w-6" />
                 </div>
-
-                <h3 className="mt-8 text-xl font-bold text-slate-50">{feature.title}</h3>
-
-                <p className="mt-4 text-base leading-7 text-slate-400">
-                  {feature.description}
-                </p>
+                <h3 className="mt-6 text-lg font-bold" style={fontDisplay}>
+                  {feature.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-500">{feature.description}</p>
               </motion.div>
             );
           })}
@@ -353,77 +697,67 @@ export default function Home() {
       </section>
 
       {/* =====================================================
-          VR SCENES
+          VR SCENES — abstract scenario diagrams, no photography
       ====================================================== */}
-      <section className="border-y border-slate-800 bg-slate-900/30">
-        <div className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
-          <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-                Dynamic Environments
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#46E1D0]" style={fontMono}>
+                Immersive environments
               </p>
-
-              <h2 className="mt-5 text-4xl font-extrabold sm:text-5xl">
-                Explore learning simulations
+              <h2 className="mt-4 text-3xl font-bold sm:text-4xl" style={fontDisplay}>
+                Explore learning scenarios
               </h2>
-
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-400">
-                Visualize how diverse, high-fidelity practical training environments can become an integral component of your learning journey.
+              <p className="mt-4 max-w-2xl leading-7 text-slate-400">
+                Visualize how different practical training environments can
+                become part of the learning experience.
               </p>
             </div>
-
-            <Link
-              to="/trainings"
-              className="group inline-flex items-center gap-2.5 text-base font-semibold text-cyan-400 hover:text-cyan-300"
-            >
-              View All Trainings
-              <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            <Link to="/trainings" className="group inline-flex items-center gap-2 text-sm font-semibold text-[#46E1D0]">
+              View trainings
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
             {vrScenes.map((scene, index) => (
               <motion.article
                 key={scene.title}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: index * 0.15, duration: 0.7, ease: "easeOut" }}
-                whileHover={{ y: -10, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
-                className="group overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60 shadow-lg transition-all duration-400"
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="group overflow-hidden rounded-2xl border border-white/10 bg-[#0B1120]"
               >
-                {/* Premium Abstract Visual (replaces image) */}
-                <div className="relative overflow-hidden border-b border-slate-800">
-                  {scene.abstractVisual}
-                  
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d1526] via-transparent to-transparent opacity-80" />
-
-                  <div className="absolute left-5 top-5 rounded-full border border-slate-700 bg-slate-900/80 px-4 py-2 text-xs font-semibold text-cyan-300 backdrop-blur-md">
-                    VR Environment
+                <div className="relative overflow-hidden">
+                  <ScenarioDiagram variant={scene.variant} />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent" />
+                  <div
+                    className="absolute left-4 top-4 rounded-full border border-white/10 bg-[#080B14]/70 px-3 py-1.5 text-[11px] font-semibold text-[#46E1D0] backdrop-blur"
+                    style={fontMono}
+                  >
+                    {scene.coord}
                   </div>
                 </div>
 
-                <div className="p-8">
-                  <div className="flex items-start justify-between gap-6">
+                <div className="p-6">
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-slate-50">{scene.title}</h3>
-                      <p className="mt-4 text-base leading-7 text-slate-400">
-                        {scene.description}
-                      </p>
+                      <h3 className="text-xl font-bold" style={fontDisplay}>
+                        {scene.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-slate-500">{scene.description}</p>
                     </div>
-
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800 mt-1">
-                      <Headset className="h-6 w-6" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#46E1D0]/10 text-[#46E1D0]">
+                      <Headset className="h-5 w-5" />
                     </div>
                   </div>
 
-                  <Link
-                    to="/trainings"
-                    className="mt-8 inline-flex items-center gap-2.5 text-base font-semibold text-slate-100 group-hover:text-cyan-300"
-                  >
+                  <Link to="/trainings" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">
                     Explore
-                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1.5" />
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
               </motion.article>
@@ -435,40 +769,43 @@ export default function Home() {
       {/* =====================================================
           TRAINING AREAS
       ====================================================== */}
-      <section className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
-        <div className="grid items-center gap-16 lg:grid-cols-[1fr_0.9fr]">
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="grid items-center gap-14 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-              Practical Skill Mastery
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#46E1D0]" style={fontMono}>
+              Practical learning
             </p>
-
-            <h2 className="mt-5 text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
-              Learn through guided simulation.
+            <h2 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl" style={fontDisplay}>
+              Learn by exploring situations.
             </h2>
-
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-400">
-              Our platform structures training around crucial practical domains. Learners practice identifying environmental factors, evaluating risks, and making critical, informed decisions.
+            <p className="mt-6 max-w-xl leading-8 text-slate-400">
+              The platform can organize training around practical areas where
+              learners need to understand situations, identify risks and make
+              informed decisions.
             </p>
 
-            <div className="mt-12 space-y-5">
+            <div className="mt-8 space-y-4">
               {trainingAreas.map((area) => {
                 const Icon = area.icon;
-
                 return (
                   <motion.div
                     key={area.title}
-                    whileHover={{ x: 8, borderColor: 'rgba(34, 211, 238, 0.2)', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                    className="flex gap-5 rounded-2xl border border-slate-800 bg-slate-900/40 p-6 transition-all duration-300"
+                    whileHover={{ x: 6 }}
+                    className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition hover:border-[#46E1D0]/20"
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800">
-                      <Icon className="h-6 w-6" />
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#46E1D0]/10 text-[#46E1D0]">
+                      <Icon className="h-5 w-5" />
                     </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-50">{area.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-400">
-                        {area.description}
-                      </p>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold" style={fontDisplay}>
+                          {area.title}
+                        </h3>
+                        <span className="text-[10px] text-slate-600" style={fontMono}>
+                          {area.tag}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-sm leading-6 text-slate-500">{area.description}</p>
                     </div>
                   </motion.div>
                 );
@@ -476,134 +813,59 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Premium VR Illustration Panel (replaces image) */}
+          {/* Layered environment visual — replaces photo panel */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
             className="relative"
           >
-            <div className="absolute -inset-8 rounded-[3rem] bg-blue-600/15 blur-[60px] opacity-70" />
-
-            {/* Illustration Canvas */}
-            <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-700 bg-slate-900/70 p-3 shadow-2xl backdrop-blur-sm">
-              <div className="relative h-[620px] w-full rounded-[2rem] bg-[#0d1526] overflow-hidden flex flex-col items-center justify-center p-10">
-                
-                {/* Abstract visualization of skill application */}
-                <div className="w-full flex-1 flex items-center justify-center gap-6">
-                    <div className="w-1/3 h-64 bg-slate-800 rounded-2xl border border-slate-700 p-6 flex flex-col shadow-inner">
-                        <div className="w-12 h-12 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center mb-4">
-                            <ShieldCheck className="w-6 h-6 text-cyan-400" />
-                        </div>
-                        <div className="h-3 w-full bg-slate-600 rounded-full mb-3"></div>
-                        <div className="h-3 w-3/4 bg-slate-700 rounded-full"></div>
-                    </div>
-                    <div className="w-2/3 h-80 bg-slate-800 rounded-2xl border border-slate-700 p-8 flex flex-col shadow-2xl relative">
-                        <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center absolute -top-7 -right-7 shadow-lg">
-                            <Sparkles className="w-7 h-7 text-white" />
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-blue-950 border border-blue-800 flex items-center justify-center mb-5">
-                            <Layers3 className="w-6 h-6 text-blue-400" />
-                        </div>
-                        <div className="h-3 w-full bg-slate-600 rounded-full mb-3"></div>
-                        <div className="h-3 w-5/6 bg-slate-600 rounded-full mb-3"></div>
-                        <div className="h-3 w-1/2 bg-slate-700 rounded-full"></div>
-                    </div>
-                </div>
-
-                <div className="w-full h-24 bg-slate-800 rounded-2xl border border-slate-700 mt-6 flex items-center gap-5 p-6 shadow-inner">
-                   <div className="w-12 h-12 rounded-full bg-slate-700 border border-slate-600"></div>
-                   <div className="flex-1 space-y-2.5">
-                       <div className="h-3 w-1/3 bg-slate-600 rounded-full"></div>
-                       <div className="h-3 w-2/3 bg-slate-700 rounded-full"></div>
-                   </div>
-                </div>
-
-                {/* Gradient Overlay & Info Box */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1120] via-transparent to-transparent opacity-90" />
-
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="rounded-2xl border border-slate-700 bg-slate-950/80 p-6 backdrop-blur-xl shadow-xl">
-                    <div className="flex items-center gap-5">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-950 text-blue-400 border border-blue-800">
-                        <GraduationCap className="h-7 w-7" />
-                      </div>
-
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-blue-400">
-                          Experience-Driven
-                        </p>
-                        <p className="mt-2 text-base font-semibold text-slate-100">
-                          Synthesizing knowledge through virtual exploration
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className="absolute -inset-5 rounded-[2rem] bg-[#1E3A5F]/20 blur-3xl" />
+            <LayeredEnvironment />
           </motion.div>
         </div>
       </section>
 
       {/* =====================================================
-          LEARNER EXPERIENCE
+          WHO IT IS FOR
       ====================================================== */}
-      <section className="border-y border-slate-800 bg-slate-900/30">
-        <div className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">
-              The Learning Journey
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#46E1D0]" style={fontMono}>
+              Learning experience
             </p>
-
-            <h2 className="mt-5 text-4xl font-extrabold sm:text-5xl">
-              Architected for the modern learner
+            <h2 className="mt-4 text-3xl font-bold sm:text-4xl" style={fontDisplay}>
+              Designed around the learner
             </h2>
-
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-400">
-              eTraining provides the core framework for a progressive, visual, and highly interactive educational experience.
+            <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
+              eTraining provides a foundation for practical, visual and
+              interactive learning experiences.
             </p>
           </div>
 
-          <div className="mx-auto mt-16 grid max-w-6xl gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: GraduationCap,
-                title: "Acquire",
-                text: "Build foundational knowledge through structured, rich learning content.",
-              },
-              {
-                icon: Headset,
-                title: "Immerse",
-                text: "Deeply engage with concepts in high-fidelity, interactive virtual environments.",
-              },
-              {
-                icon: Target,
-                title: "Apply",
-                text: "Reinforce and test skills through challenging, realistic practical scenarios.",
-              },
-            ].map((item, index) => {
+          <div className="mx-auto mt-12 grid max-w-5xl gap-5 md:grid-cols-3">
+            {journey.map((item, index) => {
               const Icon = item.icon;
-
               return (
                 <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ delay: index * 0.15, duration: 0.6, ease: "easeOut" }}
-                  className="rounded-3xl border border-slate-800 bg-slate-950 p-10 text-center shadow-lg"
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="rounded-2xl border border-white/10 bg-[#0B1120] p-7 text-center"
                 >
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-800">
-                    <Icon className="h-8 w-8" />
-                  </div>
-
-                  <h3 className="mt-8 text-2xl font-bold text-slate-50">{item.title}</h3>
-
-                  <p className="mt-5 text-base leading-7 text-slate-400">
-                    {item.text}
+                  <p className="text-[11px] font-medium tracking-[0.2em] text-slate-600" style={fontMono}>
+                    {item.phase}
                   </p>
+                  <div className="mx-auto mt-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#46E1D0]/10 text-[#46E1D0]">
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-bold" style={fontDisplay}>
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-500">{item.text}</p>
                 </motion.div>
               );
             })}
@@ -614,44 +876,35 @@ export default function Home() {
       {/* =====================================================
           CTA
       ====================================================== */}
-      <section className="relative overflow-hidden bg-[#0d1526]">
-        {/* Subdued Radial Gradient */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.1),transparent_60%)]" />
-
-        <div className="relative mx-auto max-w-5xl px-6 py-32 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl border border-cyan-800 bg-cyan-950/60 text-cyan-400 shadow-xl">
-              <Headset className="h-10 w-10" />
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(70,225,208,0.12),transparent_55%)]" />
+        <div className="relative mx-auto max-w-5xl px-6 py-28 text-center">
+          <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#46E1D0]/20 bg-[#46E1D0]/10 text-[#46E1D0]">
+              <Compass className="h-8 w-8" />
             </div>
-
-            <h2 className="mt-10 text-4xl font-extrabold sm:text-5xl lg:text-6xl tracking-tight">
-              Ready to redefine professional learning?
+            <h2 className="mt-7 text-4xl font-bold sm:text-5xl" style={fontDisplay}>
+              Ready to explore immersive learning?
             </h2>
-
-            <p className="mx-auto mt-7 max-w-3xl text-xl leading-9 text-slate-400">
-              Discover how eTraining can elevate your educational strategy, bringing true-to-life practical experience directly to the learner.
+            <p className="mx-auto mt-5 max-w-2xl leading-8 text-slate-400">
+              Explore the available training content and discover how
+              eTraining can bring practical learning closer to the learner.
             </p>
 
-            <div className="mt-14 flex flex-col justify-center gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
                 to="/trainings"
-                className="inline-flex items-center justify-center gap-3 rounded-xl bg-slate-50 px-9 py-4.5 font-bold text-slate-950 transition-all duration-300 hover:bg-cyan-300 hover:shadow-cyan-950/30 hover:shadow-lg"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-bold text-[#080B14] transition hover:bg-[#46E1D0]"
               >
-                Explore All Trainings
+                Explore Trainings
                 <ArrowRight className="h-5 w-5" />
               </Link>
-
               <Link
                 to="/register"
-                className="inline-flex items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-800/40 px-9 py-4.5 font-semibold text-slate-200 backdrop-blur-lg transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-4 font-semibold text-white transition hover:bg-white/10"
               >
-                Request a Demo
-                <Users className="h-5 w-5 text-slate-400" />
+                Create Account
+                <Users className="h-5 w-5" />
               </Link>
             </div>
           </motion.div>
