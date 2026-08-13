@@ -1,6 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
@@ -27,15 +26,12 @@ type RegisterForm = {
   phone: string;
   country: string;
   city: string;
-
   organizationName: string;
   organizationType: string;
   organizationCode: string;
   secretKey: string;
-
   role: string;
   purposes: string[];
-
   password: string;
   confirmPassword: string;
 };
@@ -47,15 +43,12 @@ const initialForm: RegisterForm = {
   phone: "",
   country: "",
   city: "",
-
   organizationName: "",
   organizationType: "",
   organizationCode: "",
   secretKey: "",
-
   role: "",
   purposes: [],
-
   password: "",
   confirmPassword: "",
 };
@@ -84,9 +77,8 @@ const organizationTypes: string[] = [
 ];
 
 export default function Register() {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState<RegisterForm>(initialForm);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -99,12 +91,6 @@ export default function Register() {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
 
-  /*
-   * ---------------------------------------------------------
-   * INPUT HANDLER
-   * ---------------------------------------------------------
-   */
-
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -115,12 +101,6 @@ export default function Register() {
       [name]: value,
     }));
   };
-
-  /*
-   * ---------------------------------------------------------
-   * PURPOSE HANDLER
-   * ---------------------------------------------------------
-   */
 
   const handlePurposeChange = (purpose: string) => {
     setForm((previous) => {
@@ -134,12 +114,6 @@ export default function Register() {
       };
     });
   };
-
-  /*
-   * ---------------------------------------------------------
-   * ACCOUNT TYPE
-   * ---------------------------------------------------------
-   */
 
   const handleAccountTypeChange = (accountType: AccountType) => {
     setForm((previous) => ({
@@ -157,19 +131,6 @@ export default function Register() {
     setSuccess("");
   };
 
-  /*
-   * ---------------------------------------------------------
-   * VERIFY ORGANIZATION SECRET KEY
-   * ---------------------------------------------------------
-   *
-   * For now this is frontend logic.
-   *
-   * Later:
-   *   POST /api/organizations/verify-key
-   *
-   * The backend should verify the real secret key.
-   */
-
   const verifyOrganization = () => {
     setError("");
     setSuccess("");
@@ -185,29 +146,24 @@ export default function Register() {
     }
 
     if (!form.secretKey.trim()) {
-      setError("Enter the secret key provided by your organization admin.");
+      setError(
+        "Enter the secret key provided by your organization administrator."
+      );
       return;
     }
 
     /*
-     * Temporary UI verification.
+     * Temporary frontend verification.
      *
-     * DO NOT use this as real security.
-     * Real verification must happen on the backend.
+     * Real verification should be done by the backend
+     * when the API is connected.
      */
-
     setOrganizationVerified(true);
 
     setSuccess(
       "Organization information accepted. You can continue with registration."
     );
   };
-
-  /*
-   * ---------------------------------------------------------
-   * VALIDATION
-   * ---------------------------------------------------------
-   */
 
   const validateForm = (): boolean => {
     setError("");
@@ -228,7 +184,7 @@ export default function Register() {
     }
 
     if (!form.country.trim()) {
-      setError("Please select or enter your country.");
+      setError("Please enter your country.");
       return false;
     }
 
@@ -240,6 +196,11 @@ export default function Register() {
 
       if (!form.organizationType) {
         setError("Please select the organization type.");
+        return false;
+      }
+
+      if (!organizationVerified) {
+        setError("Please verify your organization before continuing.");
         return false;
       }
     }
@@ -254,19 +215,8 @@ export default function Register() {
       return false;
     }
 
-    if (form.accountType === "organization" && !organizationVerified) {
-      setError("Please verify your organization before continuing.");
-      return false;
-    }
-
     return true;
   };
-
-  /*
-   * ---------------------------------------------------------
-   * SUBMIT
-   * ---------------------------------------------------------
-   */
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -282,7 +232,9 @@ export default function Register() {
 
     try {
       /*
-       * Later connect this to your backend:
+       * Backend registration will be connected here.
+       *
+       * Example:
        *
        * await fetch("/api/auth/register", {
        *   method: "POST",
@@ -298,14 +250,8 @@ export default function Register() {
       });
 
       setSuccess(
-        "Account information is ready. Backend registration can now be connected."
+        "Your registration information is ready. Backend registration can now be connected."
       );
-
-      /*
-       * When backend is ready:
-       *
-       * navigate("/login");
-       */
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -340,8 +286,6 @@ export default function Register() {
         {/* ACCOUNT TYPE */}
 
         <div className="mb-8 grid gap-4 md:grid-cols-2">
-          {/* INDIVIDUAL */}
-
           <button
             type="button"
             onClick={() => handleAccountTypeChange("individual")}
@@ -368,8 +312,6 @@ export default function Register() {
               want to access training independently.
             </p>
           </button>
-
-          {/* ORGANIZATION */}
 
           <button
             type="button"
@@ -423,8 +365,6 @@ export default function Register() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              {/* FULL NAME */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   Full name
@@ -443,8 +383,6 @@ export default function Register() {
                   />
                 </div>
               </div>
-
-              {/* EMAIL */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -465,8 +403,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* PHONE */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   Phone number
@@ -485,8 +421,6 @@ export default function Register() {
                   />
                 </div>
               </div>
-
-              {/* COUNTRY */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -507,8 +441,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* CITY */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   City
@@ -523,8 +455,6 @@ export default function Register() {
                   className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3.5 outline-none transition focus:border-cyan-400/50"
                 />
               </div>
-
-              {/* ROLE */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -570,8 +500,6 @@ export default function Register() {
               </div>
 
               <div className="grid gap-5 md:grid-cols-2">
-                {/* ORGANIZATION NAME */}
-
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
                     Organization name
@@ -586,8 +514,6 @@ export default function Register() {
                     className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3.5 outline-none transition focus:border-cyan-400/50"
                   />
                 </div>
-
-                {/* ORGANIZATION TYPE */}
 
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
@@ -610,8 +536,6 @@ export default function Register() {
                   </select>
                 </div>
 
-                {/* ORGANIZATION CODE */}
-
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
                     Organization code
@@ -626,8 +550,6 @@ export default function Register() {
                     className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3.5 outline-none transition focus:border-cyan-400/50"
                   />
                 </div>
-
-                {/* SECRET KEY */}
 
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
@@ -665,8 +587,6 @@ export default function Register() {
                   </p>
                 </div>
               </div>
-
-              {/* VERIFY */}
 
               <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex gap-3">
@@ -761,8 +681,6 @@ export default function Register() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              {/* PASSWORD */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   Password
@@ -793,8 +711,6 @@ export default function Register() {
                   </button>
                 </div>
               </div>
-
-              {/* CONFIRM PASSWORD */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -831,7 +747,7 @@ export default function Register() {
             </div>
           </section>
 
-          {/* ERROR / SUCCESS */}
+          {/* MESSAGES */}
 
           {(error || success) && (
             <div className="px-6 pt-6 sm:px-8">
@@ -849,7 +765,7 @@ export default function Register() {
             </div>
           )}
 
-          {/* SUBMIT */}
+          {/* FOOTER */}
 
           <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div className="flex items-center gap-3 text-sm text-slate-500">
