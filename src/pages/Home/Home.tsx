@@ -1,70 +1,128 @@
+
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
   ChevronRight,
-  Play,
+  HardHat,
+  GraduationCap,
   ShieldCheck,
-  Sparkles,
   Target,
   Users,
-  Zap,
+  BriefcaseBusiness,
+  TrendingUp,
+  BookOpen,
+  MapPin,
+  ExternalLink,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const trainings = [
+const stats = [
   {
-    title: "Construction Safety",
-    description:
-      "Learn how to identify hazards, use PPE correctly and respond to emergencies.",
-    category: "Safety",
-    level: "Beginner",
+    value: "8.5M",
+    label: "Working-age population",
+    description: "People aged 16+ in Rwanda in 2025",
   },
   {
-    title: "Electrical Safety",
-    description:
-      "Build practical awareness around electrical hazards and safe working practices.",
-    category: "Technical",
-    level: "Intermediate",
+    value: "4.8M",
+    label: "Employed people",
+    description: "Approximately employed in 2025",
   },
   {
-    title: "Fire Safety",
-    description:
-      "Understand fire prevention, emergency procedures and safe evacuation.",
-    category: "Emergency",
-    level: "Beginner",
+    value: "12.4%",
+    label: "Unemployment rate",
+    description: "Rwanda annual rate in 2025",
+  },
+  {
+    value: "8.9%",
+    label: "Construction employment",
+    description: "Share of employment in construction",
   },
 ];
 
-const stats = [
-  { value: "25+", label: "Training topics" },
-  { value: "100+", label: "Practical scenarios" },
-  { value: "24/7", label: "Learning access" },
-  { value: "100%", label: "Interactive focus" },
+const learningAreas = [
+  {
+    title: "Hazard Identification",
+    description:
+      "Learn to recognize common workplace hazards before they become incidents.",
+    icon: Target,
+  },
+  {
+    title: "PPE Inspection",
+    description:
+      "Understand the importance of checking personal protective equipment before use.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Working at Height",
+    description:
+      "Explore the safety principles involved when work takes place at height.",
+    icon: HardHat,
+  },
+  {
+    title: "Emergency Response",
+    description:
+      "Learn the basic principles of responding to workplace emergencies.",
+    icon: BriefcaseBusiness,
+  },
 ];
+
+const labourFacts = [
+  {
+    title: "Labour force participation",
+    value: "63.0%",
+    text: "The labour force participation rate was reported at about 63% in 2025.",
+  },
+  {
+    title: "Employment-to-population ratio",
+    value: "55.9%",
+    text: "The employment-to-population ratio increased from 53.5% in 2024.",
+  },
+  {
+    title: "Female unemployment",
+    value: "14.2%",
+    text: "The unemployment rate among females was 14.2% in 2025.",
+  },
+  {
+    title: "Youth unemployment",
+    value: "14.7%",
+    text: "Youth had a higher unemployment rate of 14.7% in 2025.",
+  },
+];
+
+const images = {
+  rwandaInspection:
+    "https://www.minaloc.gov.rw/fileadmin/user_upload/Minaloc/News_Images/Gakenke__Ruli.jpg",
+  constructionSite:
+    "https://images.squarespace-cdn.com/content/v1/63191ca050f3d72d999492fd/1669526333760-JSWRQY0J8D41J79DDBZC/NOUS_HST_MUN_1920x12802.jpg",
+};
 
 export default function Home() {
   return (
     <main className="overflow-hidden bg-slate-950 text-white">
-      {/* HERO */}
+      {/* =========================================================
+          HERO
+      ========================================================== */}
       <section className="relative min-h-screen pt-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(6,182,212,0.16),transparent_30%),radial-gradient(circle_at_80%_30%,rgba(37,99,235,0.18),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(6,182,212,0.14),transparent_30%),radial-gradient(circle_at_85%_25%,rgba(37,99,235,0.16),transparent_32%)]" />
 
-        <div className="absolute left-10 top-40 h-32 w-32 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute bottom-20 right-10 h-48 w-48 rounded-full bg-blue-600/10 blur-3xl" />
+        <div className="absolute left-0 top-1/3 h-64 w-64 rounded-full bg-cyan-400/10 blur-[100px]" />
+
+        <div className="absolute right-0 top-1/2 h-72 w-72 rounded-full bg-blue-600/10 blur-[120px]" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-20 lg:grid-cols-2 lg:px-8">
+          {/* HERO TEXT */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8 }}
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-sm text-cyan-300">
-              <Sparkles className="h-4 w-4" />
-              Practical learning, reimagined
+              <GraduationCap className="h-4 w-4" />
+              Practical learning platform
             </div>
 
-            <h1 className="max-w-3xl text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-3xl text-5xl font-black leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
               Learn skills.
               <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 Practice safely.
@@ -73,8 +131,8 @@ export default function Home() {
             </h1>
 
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-400">
-              eTraining brings practical training, interactive scenarios and
-              immersive learning together in one modern platform.
+              eTraining is being built around practical learning, real-world
+              scenarios and interactive safety education.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -82,311 +140,451 @@ export default function Home() {
                 to="/trainings"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300"
               >
-                Explore Trainings
-                <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+                Explore Training
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
 
               <Link
-                to="/vr-experience"
+                to="/how-it-works"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur transition hover:bg-white/10"
               >
-                <Play className="h-4 w-4 fill-current" />
-                Experience VR
+                How It Works
+                <ChevronRight className="h-5 w-5" />
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-400">
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {[
-                "Interactive learning",
-                "Real-world scenarios",
-                "Progress tracking",
+                "Interactive scenarios",
+                "Practical safety content",
+                "Self-paced learning",
               ].map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-400" />
+                <div
+                  key={item}
+                  className="flex items-center gap-2 text-sm text-slate-400"
+                >
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400" />
                   {item}
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* HERO VISUAL */}
+          {/* HERO IMAGE */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.9 }}
             className="relative"
           >
-            <div className="relative mx-auto max-w-lg">
-              <div className="absolute -inset-8 rounded-[3rem] bg-cyan-400/10 blur-3xl" />
+            <div className="absolute -inset-8 rounded-[3rem] bg-cyan-400/10 blur-3xl" />
 
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 p-3 shadow-2xl">
-                <div className="rounded-[1.5rem] border border-white/10 bg-slate-950 p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-widest text-slate-500">
-                        Training simulation
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold">
-                        Construction Site
-                      </h3>
-                    </div>
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-2 shadow-2xl">
+              <div className="relative overflow-hidden rounded-[1.5rem]">
+                <img
+                  src={images.rwandaInspection}
+                  alt="Safety inspection team at a construction site in Rwanda"
+                  className="h-[520px] w-full object-cover"
+                />
 
-                    <div className="rounded-xl bg-emerald-400/10 px-3 py-2 text-xs font-semibold text-emerald-300">
-                      LIVE
-                    </div>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
 
-                  <div className="relative mt-6 h-72 overflow-hidden rounded-2xl bg-gradient-to-b from-sky-950 via-slate-800 to-slate-950">
-                    <div className="absolute inset-x-0 bottom-0 h-28 bg-slate-900/80" />
-
-                    <div className="absolute bottom-12 left-8 h-32 w-5 rotate-12 rounded bg-orange-400/80" />
-                    <div className="absolute bottom-12 left-14 h-4 w-44 rounded bg-orange-300/70" />
-
-                    <div className="absolute bottom-12 right-12 h-24 w-16 rounded-lg border-4 border-yellow-400/60" />
-
-                    <motion.div
-                      animate={{ y: [0, -8, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="absolute bottom-16 left-1/2 flex h-24 w-14 -translate-x-1/2 flex-col items-center"
-                    >
-                      <div className="h-7 w-7 rounded-full bg-orange-300" />
-                      <div className="mt-1 h-14 w-9 rounded-t-xl bg-blue-500" />
-                    </motion.div>
-
-                    <div className="absolute left-5 top-5 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-xs backdrop-blur">
-                      Hazard detected
-                    </div>
-                  </div>
-
-                  <div className="mt-5 grid grid-cols-3 gap-3">
-                    {[
-                      ["PPE", "Required"],
-                      ["Hazards", "03"],
-                      ["Progress", "72%"],
-                    ].map(([label, value]) => (
-                      <div
-                        key={label}
-                        className="rounded-xl border border-white/10 bg-white/5 p-3"
-                      >
-                        <p className="text-[10px] uppercase text-slate-500">
-                          {label}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/75 p-5 backdrop-blur-xl">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                          Real-world context
                         </p>
-                        <p className="mt-1 text-sm font-bold text-white">
-                          {value}
-                        </p>
+
+                        <h2 className="mt-2 text-xl font-bold">
+                          Construction safety in Rwanda
+                        </h2>
+
+                        <div className="mt-3 flex items-center gap-2 text-sm text-slate-400">
+                          <MapPin className="h-4 w-4 text-cyan-400" />
+                          Rwanda
+                        </div>
                       </div>
-                    ))}
+
+                      <div className="rounded-xl bg-cyan-400/10 p-3 text-cyan-300">
+                        <HardHat className="h-6 w-6" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -left-8 top-20 hidden rounded-2xl border border-white/10 bg-slate-900/90 p-4 shadow-xl backdrop-blur sm:block"
-              >
-                <ShieldCheck className="h-6 w-6 text-cyan-300" />
-                <p className="mt-2 text-xs font-semibold">Safety first</p>
-              </motion.div>
+            {/* Floating card */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute -left-6 top-20 hidden rounded-2xl border border-white/10 bg-slate-900/95 p-4 shadow-xl backdrop-blur-xl sm:block"
+            >
+              <ShieldCheck className="h-7 w-7 text-cyan-300" />
 
+              <p className="mt-2 text-xs font-bold text-white">
+                Safety education
+              </p>
+
+              <p className="mt-1 text-[11px] text-slate-500">
+                Learn before the real situation
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          VERIFIED RWANDA LABOUR DATA
+      ========================================================== */}
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+              <TrendingUp className="h-4 w-4" />
+              Rwanda labour market
+            </div>
+
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">
+              Real data behind the need for skills development
+            </h2>
+
+            <p className="mt-5 leading-8 text-slate-400">
+              These figures come from Rwanda's National Institute of Statistics
+              and are presented here as context for the platform. They are not
+              eTraining user statistics.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, index) => (
               <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -right-8 bottom-16 hidden rounded-2xl border border-white/10 bg-slate-900/90 p-4 shadow-xl backdrop-blur sm:block"
+                key={stat.label}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                whileHover={{ y: -5 }}
+                className="rounded-2xl border border-white/10 bg-slate-950 p-6 transition hover:border-cyan-400/20"
               >
-                <Target className="h-6 w-6 text-blue-300" />
-                <p className="mt-2 text-xs font-semibold">Practice</p>
+                <p className="text-4xl font-black tracking-tight text-white">
+                  {stat.value}
+                </p>
+
+                <h3 className="mt-3 font-semibold text-cyan-300">
+                  {stat.label}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  {stat.description}
+                </p>
               </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-sm font-semibold text-white">
+                Source: National Institute of Statistics of Rwanda
+              </p>
+
+              <p className="mt-1 text-xs text-slate-500">
+                Labour Force Survey — Annual Report 2025
+              </p>
+            </div>
+
+            <a
+              href="https://statistics.gov.rw/data-sources/surveys/Labour-Force-Survey/labour-force-survey-2025/labour-force-survey-annual-report-2025"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+            >
+              Verify the source
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          WHY ETRAINING
+      ========================================================== */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="grid items-center gap-14 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="overflow-hidden rounded-[2rem] border border-white/10">
+              <img
+                src={images.constructionSite}
+                alt="Workers at a construction site in Rwanda"
+                className="h-[520px] w-full object-cover transition duration-700 hover:scale-105"
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+              Why practical learning?
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black leading-tight">
+              Knowledge becomes more useful when learners can practice it.
+            </h2>
+
+            <p className="mt-6 leading-8 text-slate-400">
+              eTraining is designed to move beyond static information by
+              presenting learners with practical situations, decisions and
+              safety concepts that can be explored before entering a real
+              workplace.
+            </p>
+
+            <div className="mt-8 space-y-4">
+              {[
+                {
+                  icon: Target,
+                  title: "Recognize hazards",
+                  text: "Understand what to look for in a work environment.",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Understand protection",
+                  text: "Learn the role of personal protective equipment and safe practices.",
+                },
+                {
+                  icon: BookOpen,
+                  title: "Build knowledge",
+                  text: "Study structured content at your own pace.",
+                },
+              ].map(({ icon: Icon, title, text }) => (
+                <div
+                  key={title}
+                  className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                    <Icon className="h-5 w-5" />
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold">{title}</h3>
+
+                    <p className="mt-1 text-sm leading-6 text-slate-500">
+                      {text}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="border-y border-white/10 bg-white/[0.02]">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 px-6 py-10 sm:grid-cols-4 lg:px-8">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="border-white/10 px-5 py-4 text-center sm:border-r last:border-r-0"
-            >
-              <p className="text-3xl font-black text-white">{stat.value}</p>
-              <p className="mt-1 text-sm text-slate-500">{stat.label}</p>
+      {/* =========================================================
+          CURRENT TRAINING CONTENT
+      ========================================================== */}
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+                Construction safety
+              </p>
+
+              <h2 className="mt-3 text-3xl font-black sm:text-4xl">
+                Explore practical safety topics
+              </h2>
+
+              <p className="mt-4 max-w-2xl leading-7 text-slate-400">
+                These are the learning areas currently represented in the
+                project's Construction Safety training content.
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* TRAININGS */}
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-              Explore learning
-            </p>
-            <h2 className="mt-3 text-3xl font-black sm:text-4xl">
-              Start with practical training
-            </h2>
-            <p className="mt-4 max-w-2xl text-slate-400">
-              Explore courses designed around real situations and practical
-              decision-making.
-            </p>
-          </div>
-
-          <Link
-            to="/trainings"
-            className="group flex items-center gap-2 text-sm font-semibold text-cyan-300"
-          >
-            View all trainings
-            <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" />
-          </Link>
-        </div>
-
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {trainings.map((training, index) => (
-            <motion.div
-              key={training.title}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -6 }}
-              className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-cyan-400/20 hover:bg-white/[0.05]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="rounded-xl bg-cyan-400/10 p-3 text-cyan-300">
-                  <ShieldCheck className="h-6 w-6" />
-                </div>
-
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
-                  {training.level}
-                </span>
-              </div>
-
-              <p className="mt-7 text-xs font-semibold uppercase tracking-widest text-cyan-400">
-                {training.category}
-              </p>
-
-              <h3 className="mt-2 text-xl font-bold">{training.title}</h3>
-
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                {training.description}
-              </p>
-
-              <Link
-                to="/trainings"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
-              >
-                Explore
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* WHY ETRAINING */}
-      <section className="border-y border-white/10 bg-white/[0.02]">
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-24 lg:grid-cols-2 lg:px-8">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-              Why eTraining
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black leading-tight">
-              Training that goes beyond watching a video.
-            </h2>
-
-            <p className="mt-6 leading-8 text-slate-400">
-              Learn through practical scenarios, interactive experiences and
-              structured training designed to help you understand what to do
-              when real situations happen.
-            </p>
 
             <Link
-              to="/how-it-works"
-              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-bold text-slate-950 hover:bg-cyan-300"
+              to="/trainings"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-cyan-300"
             >
-              See how it works
-              <ArrowRight className="h-4 w-4" />
+              View training
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              {
-                icon: Target,
-                title: "Practical",
-                text: "Focus on real-world situations.",
-              },
-              {
-                icon: Zap,
-                title: "Interactive",
-                text: "Learn by exploring and making decisions.",
-              },
-              {
-                icon: Users,
-                title: "Learner focused",
-                text: "Designed around the learner experience.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Safety first",
-                text: "Practice safely before facing reality.",
-              },
-            ].map(({ icon: Icon, title, text }) => (
-              <div
-                key={title}
-                className="rounded-2xl border border-white/10 bg-slate-950 p-6"
-              >
-                <Icon className="h-7 w-7 text-cyan-300" />
-                <h3 className="mt-5 font-bold">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-500">{text}</p>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {learningAreas.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  className="group rounded-2xl border border-white/10 bg-slate-950 p-6 transition hover:border-cyan-400/20"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400/20">
+                    <Icon className="h-6 w-6" />
+                  </div>
+
+                  <h3 className="mt-6 text-lg font-bold">{item.title}</h3>
+
+                  <p className="mt-3 text-sm leading-6 text-slate-500">
+                    {item.description}
+                  </p>
+
+                  <Link
+                    to="/trainings"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
+                  >
+                    Learn more
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          LABOUR FACTS
+      ========================================================== */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+              More verified data
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black leading-tight">
+              A closer look at Rwanda's labour market
+            </h2>
+
+            <p className="mt-5 leading-8 text-slate-400">
+              eTraining can serve as a learning environment for people
+              developing practical knowledge and skills. The figures below
+              provide national labour-market context rather than platform
+              performance claims.
+            </p>
+
+            <div className="mt-8 flex items-center gap-4 rounded-2xl border border-cyan-400/10 bg-cyan-400/5 p-5">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                <Users className="h-6 w-6" />
               </div>
+
+              <div>
+                <p className="font-bold">4.8 million</p>
+
+                <p className="text-sm text-slate-500">
+                  people were approximately employed in Rwanda in 2025.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {labourFacts.map((fact, index) => (
+              <motion.div
+                key={fact.title}
+                initial={{ opacity: 0, scale: 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className="rounded-2xl border border-white/10 bg-white/[0.025] p-6"
+              >
+                <p className="text-sm font-medium text-slate-500">
+                  {fact.title}
+                </p>
+
+                <p className="mt-3 text-3xl font-black text-cyan-300">
+                  {fact.value}
+                </p>
+
+                <p className="mt-4 text-sm leading-6 text-slate-400">
+                  {fact.text}
+                </p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10" />
+      {/* =========================================================
+          FINAL CTA
+      ========================================================== */}
+      <section className="relative overflow-hidden border-t border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.12),transparent_55%)]" />
 
         <div className="relative mx-auto max-w-5xl px-6 py-24 text-center">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
-            Ready to learn?
-          </p>
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300">
+            <GraduationCap className="h-7 w-7" />
+          </div>
 
-          <h2 className="mt-4 text-4xl font-black sm:text-5xl">
-            Turn knowledge into practical confidence.
+          <h2 className="mt-6 text-4xl font-black sm:text-5xl">
+            Start exploring practical learning.
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
-            Explore the platform and discover a better way to learn practical
-            skills.
+            Explore the available training content and discover how
+            interactive learning can support practical skills development.
           </p>
 
-          <Link
-            to="/trainings"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300"
-          >
-            Explore Trainings
-            <ArrowRight className="h-5 w-5" />
-          </Link>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to="/trainings"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300"
+            >
+              Explore Trainings
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+
+            <Link
+              to="/about"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 font-semibold text-white transition hover:bg-white/10"
+            >
+              About eTraining
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          DATA DISCLAIMER
+      ========================================================== */}
+      <section className="border-t border-white/10 bg-slate-950">
+        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+          <div className="flex flex-col gap-3 text-xs leading-5 text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Labour statistics displayed on this page are from Rwanda's
+              National Institute of Statistics, Labour Force Survey 2025.
+            </p>
+
+            <a
+              href="https://statistics.gov.rw/data-sources/surveys/Labour-Force-Survey/labour-force-survey-2025/labour-force-survey-annual-report-2025"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex shrink-0 items-center gap-1 text-cyan-500 hover:text-cyan-300"
+            >
+              NISR source
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
         </div>
       </section>
     </main>
   );
 }
+
