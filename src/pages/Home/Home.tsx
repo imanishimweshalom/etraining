@@ -1,180 +1,181 @@
-
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
   ChevronRight,
-  HardHat,
+  Eye,
+  Gamepad2,
   GraduationCap,
+  Headset,
+  Layers3,
+  Play,
   ShieldCheck,
+  Sparkles,
   Target,
   Users,
-  BriefcaseBusiness,
-  TrendingUp,
-  BookOpen,
-  MapPin,
-  ExternalLink,
+  Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const stats = [
+const trainingAreas = [
   {
-    value: "8.5M",
-    label: "Working-age population",
-    description: "People aged 16+ in Rwanda in 2025",
-  },
-  {
-    value: "4.8M",
-    label: "Employed people",
-    description: "Approximately employed in 2025",
-  },
-  {
-    value: "12.4%",
-    label: "Unemployment rate",
-    description: "Rwanda annual rate in 2025",
-  },
-  {
-    value: "8.9%",
-    label: "Construction employment",
-    description: "Share of employment in construction",
-  },
-];
-
-const learningAreas = [
-  {
-    title: "Hazard Identification",
+    title: "VR Safety Simulation",
     description:
-      "Learn to recognize common workplace hazards before they become incidents.",
-    icon: Target,
-  },
-  {
-    title: "PPE Inspection",
-    description:
-      "Understand the importance of checking personal protective equipment before use.",
+      "Explore workplace safety situations through immersive virtual environments.",
     icon: ShieldCheck,
   },
   {
-    title: "Working at Height",
+    title: "Interactive Scenarios",
     description:
-      "Explore the safety principles involved when work takes place at height.",
-    icon: HardHat,
+      "Make decisions inside practical scenarios and understand the consequences.",
+    icon: Target,
   },
   {
-    title: "Emergency Response",
+    title: "Immersive Learning",
     description:
-      "Learn the basic principles of responding to workplace emergencies.",
-    icon: BriefcaseBusiness,
+      "Experience learning content through interactive visual environments.",
+    icon: Headset,
+  },
+  {
+    title: "Practical Skills",
+    description:
+      "Connect learning concepts with situations that can happen in real workplaces.",
+    icon: Layers3,
   },
 ];
 
-const labourFacts = [
+const features = [
   {
-    title: "Labour force participation",
-    value: "63.0%",
-    text: "The labour force participation rate was reported at about 63% in 2025.",
+    icon: Headset,
+    title: "Virtual Reality",
+    description:
+      "A learning experience designed around immersive environments and simulations.",
   },
   {
-    title: "Employment-to-population ratio",
-    value: "55.9%",
-    text: "The employment-to-population ratio increased from 53.5% in 2024.",
+    icon: Gamepad2,
+    title: "Interactive",
+    description:
+      "Learning activities can involve exploration, decisions and practical scenarios.",
   },
   {
-    title: "Female unemployment",
-    value: "14.2%",
-    text: "The unemployment rate among females was 14.2% in 2025.",
+    icon: Eye,
+    title: "Visual Learning",
+    description:
+      "Understand concepts through visual environments rather than text alone.",
   },
   {
-    title: "Youth unemployment",
-    value: "14.7%",
-    text: "Youth had a higher unemployment rate of 14.7% in 2025.",
+    icon: Zap,
+    title: "Practical Focus",
+    description:
+      "Focus on knowledge and skills that can be connected to real situations.",
   },
 ];
 
-const images = {
-  rwandaInspection:
-    "https://www.minaloc.gov.rw/fileadmin/user_upload/Minaloc/News_Images/Gakenke__Ruli.jpg",
-  constructionSite:
-    "https://images.squarespace-cdn.com/content/v1/63191ca050f3d72d999492fd/1669526333760-JSWRQY0J8D41J79DDBZC/NOUS_HST_MUN_1920x12802.jpg",
-};
+const vrScenes = [
+  {
+    title: "Construction Safety",
+    description:
+      "Explore hazards and safe practices inside a virtual construction environment.",
+    image:
+      "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=1400&q=85",
+  },
+  {
+    title: "Workplace Training",
+    description:
+      "Experience practical workplace learning through immersive technology.",
+    image:
+      "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=1400&q=85",
+  },
+  {
+    title: "Immersive Education",
+    description:
+      "Discover a different way of learning using virtual environments.",
+    image:
+      "https://images.unsplash.com/photo-1617802690992-15d93263d3a9?auto=format&fit=crop&w=1400&q=85",
+  },
+];
 
 export default function Home() {
   return (
     <main className="overflow-hidden bg-slate-950 text-white">
-      {/* =========================================================
+      {/* =====================================================
           HERO
-      ========================================================== */}
-      <section className="relative min-h-screen pt-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(6,182,212,0.14),transparent_30%),radial-gradient(circle_at_85%_25%,rgba(37,99,235,0.16),transparent_32%)]" />
+      ====================================================== */}
+      <section className="relative min-h-screen pt-24">
+        {/* Background glow */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-[-10%] top-[15%] h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[120px]" />
 
-        <div className="absolute left-0 top-1/3 h-64 w-64 rounded-full bg-cyan-400/10 blur-[100px]" />
+          <div className="absolute right-[-10%] top-[25%] h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[140px]" />
 
-        <div className="absolute right-0 top-1/2 h-72 w-72 rounded-full bg-blue-600/10 blur-[120px]" />
+          <div className="absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/10 blur-[130px]" />
+        </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-20 lg:grid-cols-2 lg:px-8">
-          {/* HERO TEXT */}
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-28">
+          {/* Hero text */}
           <motion.div
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-sm text-cyan-300">
-              <GraduationCap className="h-4 w-4" />
-              Practical learning platform
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-sm font-medium text-cyan-300 backdrop-blur">
+              <Sparkles className="h-4 w-4" />
+              Immersive practical learning
             </div>
 
-            <h1 className="max-w-3xl text-5xl font-black leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
-              Learn skills.
+            <h1 className="max-w-3xl text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+              Learn beyond the
               <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                Practice safely.
+                classroom.
               </span>
-              Build confidence.
             </h1>
 
-            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-400">
-              eTraining is being built around practical learning, real-world
-              scenarios and interactive safety education.
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
+              eTraining brings practical education closer to learners through
+              interactive experiences, virtual reality concepts and real-world
+              scenarios.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 to="/trainings"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-bold text-slate-950 transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-300"
               >
                 Explore Training
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
 
               <Link
                 to="/how-it-works"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-4 font-semibold text-white backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/10"
               >
                 How It Works
                 <ChevronRight className="h-5 w-5" />
               </Link>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3">
               {[
                 "Interactive scenarios",
-                "Practical safety content",
-                "Self-paced learning",
+                "Virtual environments",
+                "Practical learning",
               ].map((item) => (
                 <div
                   key={item}
                   className="flex items-center gap-2 text-sm text-slate-400"
                 >
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400" />
+                  <CheckCircle2 className="h-4 w-4 text-cyan-400" />
                   {item}
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* HERO IMAGE */}
+          {/* Hero VR visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9 }}
+            transition={{ duration: 1 }}
             className="relative"
           >
             <div className="absolute -inset-8 rounded-[3rem] bg-cyan-400/10 blur-3xl" />
@@ -182,33 +183,42 @@ export default function Home() {
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-2 shadow-2xl">
               <div className="relative overflow-hidden rounded-[1.5rem]">
                 <img
-                  src={images.rwandaInspection}
-                  alt="Safety inspection team at a construction site in Rwanda"
+                  src="https://images.unsplash.com/photo-1592478411213-6153e4ebc696?auto=format&fit=crop&w=1600&q=90"
+                  alt="Person using a virtual reality headset"
                   className="h-[520px] w-full object-cover"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                {/* Center play button */}
+                <motion.div
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-2xl backdrop-blur-xl"
+                >
+                  <Play className="ml-1 h-7 w-7 fill-white" />
+                </motion.div>
+
+                {/* Bottom information */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
                   <div className="rounded-2xl border border-white/10 bg-slate-950/75 p-5 backdrop-blur-xl">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                          Real-world context
-                        </p>
-
-                        <h2 className="mt-2 text-xl font-bold">
-                          Construction safety in Rwanda
-                        </h2>
-
-                        <div className="mt-3 flex items-center gap-2 text-sm text-slate-400">
-                          <MapPin className="h-4 w-4 text-cyan-400" />
-                          Rwanda
-                        </div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                        <Headset className="h-6 w-6" />
                       </div>
 
-                      <div className="rounded-xl bg-cyan-400/10 p-3 text-cyan-300">
-                        <HardHat className="h-6 w-6" />
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
+                          Immersive learning
+                        </p>
+
+                        <h2 className="mt-1 text-lg font-bold">
+                          Experience the learning environment
+                        </h2>
                       </div>
                     </div>
                   </div>
@@ -216,199 +226,132 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Floating card */}
+            {/* Floating VR card */}
             <motion.div
-              animate={{ y: [0, -10, 0] }}
+              animate={{ y: [0, -12, 0] }}
               transition={{
-                duration: 3,
+                duration: 3.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute -left-6 top-20 hidden rounded-2xl border border-white/10 bg-slate-900/95 p-4 shadow-xl backdrop-blur-xl sm:block"
+              className="absolute -left-5 top-20 hidden rounded-2xl border border-white/10 bg-slate-900/90 p-4 shadow-2xl backdrop-blur-xl sm:block"
             >
-              <ShieldCheck className="h-7 w-7 text-cyan-300" />
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                  <Headset className="h-5 w-5" />
+                </div>
 
-              <p className="mt-2 text-xs font-bold text-white">
-                Safety education
-              </p>
-
-              <p className="mt-1 text-[11px] text-slate-500">
-                Learn before the real situation
-              </p>
+                <div>
+                  <p className="text-sm font-bold">VR Training</p>
+                  <p className="text-xs text-slate-500">Immersive experience</p>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* =========================================================
-          VERIFIED RWANDA LABOUR DATA
-      ========================================================== */}
+      {/* =====================================================
+          INTRO
+      ====================================================== */}
       <section className="border-y border-white/10 bg-white/[0.025]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-              <TrendingUp className="h-4 w-4" />
-              Rwanda labour market
+          <div className="grid gap-10 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+                A different way to learn
+              </p>
+
+              <h2 className="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl">
+                Turn learning into an experience.
+              </h2>
+
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-400">
+                Instead of only reading about a situation, learners can
+                explore interactive content and simulations designed to make
+                practical concepts easier to understand.
+              </p>
             </div>
 
-            <h2 className="mt-4 text-3xl font-black sm:text-4xl">
-              Real data behind the need for skills development
-            </h2>
-
-            <p className="mt-5 leading-8 text-slate-400">
-              These figures come from Rwanda's National Institute of Statistics
-              and are presented here as context for the platform. They are not
-              eTraining user statistics.
-            </p>
+            <div className="flex items-center lg:justify-end">
+              <Link
+                to="/trainings"
+                className="group inline-flex items-center gap-2 rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-5 py-3 font-semibold text-cyan-300 transition hover:bg-cyan-400/10"
+              >
+                Start exploring
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat, index) => (
+      {/* =====================================================
+          FEATURES
+      ====================================================== */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Platform experience
+          </p>
+
+          <h2 className="mt-4 text-3xl font-black sm:text-4xl">
+            Built for interactive learning
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
+            Explore learning through virtual environments, practical
+            scenarios and visual experiences.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+
+            return (
               <motion.div
-                key={stat.label}
+                key={feature.title}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08 }}
-                whileHover={{ y: -5 }}
-                className="rounded-2xl border border-white/10 bg-slate-950 p-6 transition hover:border-cyan-400/20"
+                whileHover={{ y: -7 }}
+                className="group rounded-2xl border border-white/10 bg-white/[0.025] p-6 transition-all duration-300 hover:border-cyan-400/20 hover:bg-white/[0.04]"
               >
-                <p className="text-4xl font-black tracking-tight text-white">
-                  {stat.value}
-                </p>
+                <div className="flex h-13 w-13 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400/20">
+                  <Icon className="h-6 w-6" />
+                </div>
 
-                <h3 className="mt-3 font-semibold text-cyan-300">
-                  {stat.label}
-                </h3>
+                <h3 className="mt-6 text-lg font-bold">{feature.title}</h3>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {stat.description}
+                <p className="mt-3 text-sm leading-6 text-slate-500">
+                  {feature.description}
                 </p>
               </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-8 flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:flex-row sm:items-center">
-            <div>
-              <p className="text-sm font-semibold text-white">
-                Source: National Institute of Statistics of Rwanda
-              </p>
-
-              <p className="mt-1 text-xs text-slate-500">
-                Labour Force Survey — Annual Report 2025
-              </p>
-            </div>
-
-            <a
-              href="https://statistics.gov.rw/data-sources/surveys/Labour-Force-Survey/labour-force-survey-2025/labour-force-survey-annual-report-2025"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
-            >
-              Verify the source
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* =========================================================
-          WHY ETRAINING
-      ========================================================== */}
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="grid items-center gap-14 lg:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, x: -25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="overflow-hidden rounded-[2rem] border border-white/10">
-              <img
-                src={images.constructionSite}
-                alt="Workers at a construction site in Rwanda"
-                className="h-[520px] w-full object-cover transition duration-700 hover:scale-105"
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-              Why practical learning?
-            </p>
-
-            <h2 className="mt-4 text-4xl font-black leading-tight">
-              Knowledge becomes more useful when learners can practice it.
-            </h2>
-
-            <p className="mt-6 leading-8 text-slate-400">
-              eTraining is designed to move beyond static information by
-              presenting learners with practical situations, decisions and
-              safety concepts that can be explored before entering a real
-              workplace.
-            </p>
-
-            <div className="mt-8 space-y-4">
-              {[
-                {
-                  icon: Target,
-                  title: "Recognize hazards",
-                  text: "Understand what to look for in a work environment.",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Understand protection",
-                  text: "Learn the role of personal protective equipment and safe practices.",
-                },
-                {
-                  icon: BookOpen,
-                  title: "Build knowledge",
-                  text: "Study structured content at your own pace.",
-                },
-              ].map(({ icon: Icon, title, text }) => (
-                <div
-                  key={title}
-                  className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5"
-                >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                    <Icon className="h-5 w-5" />
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold">{title}</h3>
-
-                    <p className="mt-1 text-sm leading-6 text-slate-500">
-                      {text}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          CURRENT TRAINING CONTENT
-      ========================================================== */}
+      {/* =====================================================
+          VR SCENES
+      ====================================================== */}
       <section className="border-y border-white/10 bg-white/[0.025]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-                Construction safety
+                Immersive environments
               </p>
 
-              <h2 className="mt-3 text-3xl font-black sm:text-4xl">
-                Explore practical safety topics
+              <h2 className="mt-4 text-3xl font-black sm:text-4xl">
+                Explore learning scenarios
               </h2>
 
               <p className="mt-4 max-w-2xl leading-7 text-slate-400">
-                These are the learning areas currently represented in the
-                project's Construction Safety training content.
+                Visualize how different practical training environments can
+                become part of the learning experience.
               </p>
             </div>
 
@@ -416,42 +359,214 @@ export default function Home() {
               to="/trainings"
               className="group inline-flex items-center gap-2 text-sm font-semibold text-cyan-300"
             >
-              View training
+              View trainings
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {learningAreas.map((item, index) => {
-              const Icon = item.icon;
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {vrScenes.map((scene, index) => (
+              <motion.article
+                key={scene.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="group overflow-hidden rounded-2xl border border-white/10 bg-slate-950"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={scene.image}
+                    alt={scene.title}
+                    className="h-64 w-full object-cover transition duration-700 group-hover:scale-110"
+                  />
 
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  whileHover={{ y: -6 }}
-                  className="group rounded-2xl border border-white/10 bg-slate-950 p-6 transition hover:border-cyan-400/20"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400/20">
-                    <Icon className="h-6 w-6" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+
+                  <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-slate-950/70 px-3 py-1.5 text-xs font-semibold text-cyan-300 backdrop-blur">
+                    VR Environment
                   </div>
+                </div>
 
-                  <h3 className="mt-6 text-lg font-bold">{item.title}</h3>
+                <div className="p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-bold">{scene.title}</h3>
 
-                  <p className="mt-3 text-sm leading-6 text-slate-500">
-                    {item.description}
-                  </p>
+                      <p className="mt-3 text-sm leading-6 text-slate-500">
+                        {scene.description}
+                      </p>
+                    </div>
+
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                      <Headset className="h-5 w-5" />
+                    </div>
+                  </div>
 
                   <Link
                     to="/trainings"
                     className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
                   >
-                    Learn more
+                    Explore
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          TRAINING AREAS
+      ====================================================== */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="grid items-center gap-14 lg:grid-cols-2">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+              Practical learning
+            </p>
+
+            <h2 className="mt-4 text-4xl font-black leading-tight sm:text-5xl">
+              Learn by exploring situations.
+            </h2>
+
+            <p className="mt-6 max-w-xl leading-8 text-slate-400">
+              The platform can organize training around practical areas where
+              learners need to understand situations, identify risks and make
+              informed decisions.
+            </p>
+
+            <div className="mt-8 space-y-4">
+              {trainingAreas.map((area) => {
+                const Icon = area.icon;
+
+                return (
+                  <motion.div
+                    key={area.title}
+                    whileHover={{ x: 6 }}
+                    className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition hover:border-cyan-400/20"
+                  >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                      <Icon className="h-5 w-5" />
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold">{area.title}</h3>
+
+                      <p className="mt-1 text-sm leading-6 text-slate-500">
+                        {area.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* VR image panel */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="absolute -inset-5 rounded-[2rem] bg-blue-500/10 blur-3xl" />
+
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-2">
+              <div className="relative overflow-hidden rounded-[1.5rem]">
+                <img
+                  src="https://images.unsplash.com/photo-1626379953822-baec19c3accd?auto=format&fit=crop&w=1600&q=90"
+                  alt="Immersive virtual reality learning"
+                  className="h-[580px] w-full object-cover"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+
+                <div className="absolute bottom-5 left-5 right-5">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/75 p-5 backdrop-blur-xl">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-300">
+                        <GraduationCap className="h-6 w-6" />
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300">
+                          Learning technology
+                        </p>
+
+                        <p className="mt-1 font-bold">
+                          From information to experience
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          WHO IT IS FOR
+      ====================================================== */}
+      <section className="border-y border-white/10 bg-white/[0.025]">
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+          <div className="text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
+              Learning experience
+            </p>
+
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">
+              Designed around the learner
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
+              eTraining provides a foundation for practical, visual and
+              interactive learning experiences.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-12 grid max-w-5xl gap-5 md:grid-cols-3">
+            {[
+              {
+                icon: GraduationCap,
+                title: "Learn",
+                text: "Understand concepts through structured learning content.",
+              },
+              {
+                icon: Headset,
+                title: "Experience",
+                text: "Explore immersive and interactive environments.",
+              },
+              {
+                icon: Target,
+                title: "Practice",
+                text: "Apply knowledge through practical scenarios.",
+              },
+            ].map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="rounded-2xl border border-white/10 bg-slate-950 p-7 text-center"
+                >
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300">
+                    <Icon className="h-7 w-7" />
+                  </div>
+
+                  <h3 className="mt-5 text-xl font-bold">{item.title}</h3>
+
+                  <p className="mt-3 text-sm leading-6 text-slate-500">
+                    {item.text}
+                  </p>
                 </motion.div>
               );
             })}
@@ -459,132 +574,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          LABOUR FACTS
-      ========================================================== */}
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-400">
-              More verified data
-            </p>
+      {/* =====================================================
+          CTA
+      ====================================================== */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.14),transparent_55%)]" />
 
-            <h2 className="mt-4 text-4xl font-black leading-tight">
-              A closer look at Rwanda's labour market
+        <div className="relative mx-auto max-w-5xl px-6 py-28 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
+              <Headset className="h-8 w-8" />
+            </div>
+
+            <h2 className="mt-7 text-4xl font-black sm:text-5xl">
+              Ready to explore immersive learning?
             </h2>
 
-            <p className="mt-5 leading-8 text-slate-400">
-              eTraining can serve as a learning environment for people
-              developing practical knowledge and skills. The figures below
-              provide national labour-market context rather than platform
-              performance claims.
+            <p className="mx-auto mt-5 max-w-2xl leading-8 text-slate-400">
+              Explore the available training content and discover how
+              eTraining can bring practical learning closer to the learner.
             </p>
 
-            <div className="mt-8 flex items-center gap-4 rounded-2xl border border-cyan-400/10 bg-cyan-400/5 p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                <Users className="h-6 w-6" />
-              </div>
-
-              <div>
-                <p className="font-bold">4.8 million</p>
-
-                <p className="text-sm text-slate-500">
-                  people were approximately employed in Rwanda in 2025.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {labourFacts.map((fact, index) => (
-              <motion.div
-                key={fact.title}
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="rounded-2xl border border-white/10 bg-white/[0.025] p-6"
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                to="/trainings"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-bold text-slate-950 transition hover:bg-cyan-300"
               >
-                <p className="text-sm font-medium text-slate-500">
-                  {fact.title}
-                </p>
+                Explore Trainings
+                <ArrowRight className="h-5 w-5" />
+              </Link>
 
-                <p className="mt-3 text-3xl font-black text-cyan-300">
-                  {fact.value}
-                </p>
-
-                <p className="mt-4 text-sm leading-6 text-slate-400">
-                  {fact.text}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          FINAL CTA
-      ========================================================== */}
-      <section className="relative overflow-hidden border-t border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.12),transparent_55%)]" />
-
-        <div className="relative mx-auto max-w-5xl px-6 py-24 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300">
-            <GraduationCap className="h-7 w-7" />
-          </div>
-
-          <h2 className="mt-6 text-4xl font-black sm:text-5xl">
-            Start exploring practical learning.
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">
-            Explore the available training content and discover how
-            interactive learning can support practical skills development.
-          </p>
-
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/trainings"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300"
-            >
-              Explore Trainings
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-
-            <Link
-              to="/about"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 font-semibold text-white transition hover:bg-white/10"
-            >
-              About eTraining
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          DATA DISCLAIMER
-      ========================================================== */}
-      <section className="border-t border-white/10 bg-slate-950">
-        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
-          <div className="flex flex-col gap-3 text-xs leading-5 text-slate-600 sm:flex-row sm:items-center sm:justify-between">
-            <p>
-              Labour statistics displayed on this page are from Rwanda's
-              National Institute of Statistics, Labour Force Survey 2025.
-            </p>
-
-            <a
-              href="https://statistics.gov.rw/data-sources/surveys/Labour-Force-Survey/labour-force-survey-2025/labour-force-survey-annual-report-2025"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex shrink-0 items-center gap-1 text-cyan-500 hover:text-cyan-300"
-            >
-              NISR source
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
+              <Link
+                to="/register"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-7 py-4 font-semibold text-white transition hover:bg-white/10"
+              >
+                Create Account
+                <Users className="h-5 w-5" />
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>
   );
 }
-
