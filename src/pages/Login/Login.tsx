@@ -29,38 +29,104 @@ type Profile = {
 export default function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [checkingSession, setCheckingSession] = useState<boolean>(true);
+  const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
 
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   /**
-   * Check if user is already logged in
+   * Redirect user according to profile role
+   */
+  const redirectByRole = (role: string) => {
+    switch (role) {
+      case "admin":
+        navigate("/admin/dashboard", { replace: true });
+        break;
+
+      case "instructor":
+        navigate("/instructor/dashboard", { replace: true });
+        break;
+
+      case "student":
+      default:
+        navigate("/dashboard", { replace: true });
+        break;
+    }
+  };
+
+  /**
+   * Check existing session
    */
   useEffect(() => {
+    let mounted = true;
+
     const checkSession = async () => {
       try {
         const {
           data: { session },
         } = await supabase.auth.getSession();
 
-        if (session?.user) {
-          navigate("/dashboard", { replace: true });
+        if (!mounted || !session?.user) {
+          return;
         }
+
+        /**
+         * Get user's profile
+         */
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select(
+            `
+              id,
+              full_name,
+              email,
+              avatar_url,
+              phone,
+              bio,
+              role,
+              is_active,
+              created_at,
+              updated_at
+            `
+          )
+          .eq("id", session.user.id)
+          .single<Profile>();
+
+        if (profileError || !profile) {
+          console.error("Existing session profile error:", profileError);
+
+          await supabase.auth.signOut();
+
+          return;
+        }
+
+        if (!profile.is_active) {
+          await supabase.auth.signOut();
+
+          return;
+        }
+
+        redirectByRole(profile.role);
       } catch (err) {
         console.error("Session check error:", err);
       } finally {
-        setCheckingSession(false);
+        if (mounted) {
+          setCheckingSession(false);
+        }
       }
     };
 
     void checkSession();
+
+    return () => {
+      mounted = false;
+    };
   }, [navigate]);
 
   /**
@@ -93,7 +159,7 @@ export default function Login() {
 
     try {
       /**
-       * Authenticate user with Supabase Auth
+       * Authenticate using Supabase Auth
        */
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({
@@ -104,15 +170,17 @@ export default function Login() {
       if (authError) {
         console.error("Login error:", authError);
 
-        if (
-          authError.message.toLowerCase().includes("invalid login credentials")
-        ) {
+        const message = authError.message.toLowerCase();
+
+        if (message.includes("invalid login credentials")) {
           setError("Incorrect email or password.");
-        } else if (
-          authError.message.toLowerCase().includes("email not confirmed")
-        ) {
+        } else if (message.includes("email not confirmed")) {
           setError(
             "Your email has not been confirmed. Please check your email."
+          );
+        } else if (message.includes("too many requests")) {
+          setError(
+            "Too many login attempts. Please wait a moment and try again."
           );
         } else {
           setError(authError.message);
@@ -133,22 +201,22 @@ export default function Login() {
         .from("profiles")
         .select(
           `
-          id,
-          full_name,
-          email,
-          avatar_url,
-          phone,
-          bio,
-          role,
-          is_active,
-          created_at,
-          updated_at
-        `
+            id,
+            full_name,
+            email,
+            avatar_url,
+            phone,
+            bio,
+            role,
+            is_active,
+            created_at,
+            updated_at
+          `
         )
         .eq("id", authData.user.id)
         .single<Profile>();
 
-      if (profileError) {
+      if (profileError || !profile) {
         console.error("Profile error:", profileError);
 
         await supabase.auth.signOut();
@@ -161,7 +229,7 @@ export default function Login() {
       }
 
       /**
-       * Check account status
+       * Check whether account is active
        */
       if (!profile.is_active) {
         await supabase.auth.signOut();
@@ -173,29 +241,22 @@ export default function Login() {
         return;
       }
 
-      setSuccess(`Welcome back, ${profile.full_name || "Learner"}!`);
+      /**
+       * Successful login
+       */
+      setSuccess(
+        `Welcome back, ${profile.full_name || "Learner"}!`
+      );
 
       /**
        * Redirect according to role
        */
       setTimeout(() => {
-        switch (profile.role) {
-          case "admin":
-            navigate("/admin/dashboard", { replace: true });
-            break;
-
-          case "instructor":
-            navigate("/instructor/dashboard", { replace: true });
-            break;
-
-          case "student":
-          default:
-            navigate("/dashboard", { replace: true });
-            break;
-        }
+        redirectByRole(profile.role);
       }, 500);
     } catch (err) {
       console.error("Unexpected login error:", err);
+
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -203,45 +264,8 @@ export default function Login() {
   };
 
   /**
-   * Forgot password
+   * Loading while checking session
    */
-  const handleForgotPassword = async () => {
-    setError("");
-    setSuccess("");
-
-    const cleanEmail = email.trim().toLowerCase();
-
-    if (!cleanEmail) {
-      setError("Enter your email address first.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-        cleanEmail,
-        {
-          redirectTo: `${window.location.origin}/reset-password`,
-        }
-      );
-
-      if (resetError) {
-        setError(resetError.message);
-        return;
-      }
-
-      setSuccess(
-        "Password reset instructions have been sent to your email address."
-      );
-    } catch (err) {
-      console.error("Password reset error:", err);
-      setError("Unable to send password reset email.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (checkingSession) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-white">
@@ -259,6 +283,7 @@ export default function Login() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-16 text-white sm:px-6 lg:py-24">
       <div className="mx-auto w-full max-w-md">
+
         {/* HEADER */}
         <div className="mb-8 text-center">
           <Link
@@ -287,6 +312,7 @@ export default function Login() {
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] shadow-2xl shadow-black/20">
           <form onSubmit={handleSubmit}>
             <div className="space-y-6 p-6 sm:p-8">
+
               {/* EMAIL */}
               <div>
                 <label
@@ -304,7 +330,10 @@ export default function Login() {
                     type="email"
                     name="email"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                      setError("");
+                    }}
                     placeholder="you@example.com"
                     autoComplete="email"
                     disabled={loading}
@@ -323,14 +352,13 @@ export default function Login() {
                     Password
                   </label>
 
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    disabled={loading}
-                    className="text-xs font-semibold text-cyan-300 transition hover:text-cyan-200 disabled:opacity-50"
+                  {/* FORGOT PASSWORD */}
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs font-semibold text-cyan-300 transition hover:text-cyan-200"
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
 
                 <div className="relative">
@@ -341,7 +369,10 @@ export default function Login() {
                     type={showPassword ? "text" : "password"}
                     name="password"
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                      setError("");
+                    }}
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     disabled={loading}
@@ -350,10 +381,14 @@ export default function Login() {
 
                   <button
                     type="button"
-                    onClick={() => setShowPassword((previous) => !previous)}
+                    onClick={() =>
+                      setShowPassword((previous) => !previous)
+                    }
                     disabled={loading}
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
                     }
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white disabled:opacity-50"
                   >
@@ -379,14 +414,20 @@ export default function Login() {
 
               {/* ERROR */}
               {error && (
-                <div className="rounded-xl border border-red-400/20 bg-red-400/10 p-4 text-sm leading-6 text-red-300">
+                <div
+                  role="alert"
+                  className="rounded-xl border border-red-400/20 bg-red-400/10 p-4 text-sm leading-6 text-red-300"
+                >
                   {error}
                 </div>
               )}
 
               {/* SUCCESS */}
               {success && (
-                <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-300">
+                <div
+                  role="status"
+                  className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-300"
+                >
                   {success}
                 </div>
               )}
