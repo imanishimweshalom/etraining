@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
@@ -16,6 +16,8 @@ import {
   User,
   Users,
 } from "lucide-react";
+
+import { supabase } from "../../lib/supabase";
 
 type AccountType = "individual" | "organization";
 
@@ -53,7 +55,7 @@ const initialForm: RegisterForm = {
   confirmPassword: "",
 };
 
-const purposeOptions: string[] = [
+const purposeOptions = [
   "Virtual Reality Training",
   "Workplace Safety",
   "Technical Training",
@@ -64,7 +66,7 @@ const purposeOptions: string[] = [
   "Other",
 ];
 
-const organizationTypes: string[] = [
+const organizationTypes = [
   "School",
   "University",
   "TVET Institution",
@@ -77,19 +79,19 @@ const organizationTypes: string[] = [
 ];
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<RegisterForm>(initialForm);
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
-  const [showSecretKey, setShowSecretKey] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showSecretKey, setShowSecretKey] = useState(false);
 
-  const [organizationVerified, setOrganizationVerified] =
-    useState<boolean>(false);
+  const [organizationVerified, setOrganizationVerified] = useState(false);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -100,6 +102,8 @@ export default function Register() {
       ...previous,
       [name]: value,
     }));
+
+    setError("");
   };
 
   const handlePurposeChange = (purpose: string) => {
@@ -140,6 +144,11 @@ export default function Register() {
       return;
     }
 
+    if (!form.organizationType) {
+      setError("Select your organization type.");
+      return;
+    }
+
     if (!form.organizationCode.trim()) {
       setError("Enter your organization code.");
       return;
@@ -153,10 +162,11 @@ export default function Register() {
     }
 
     /*
-     * Temporary frontend verification.
+     * Temporary verification.
      *
-     * Real verification should be done by the backend
-     * when the API is connected.
+     * IMPORTANT:
+     * Real organization verification should eventually
+     * be performed by a secure Supabase Edge Function/backend.
      */
     setOrganizationVerified(true);
 
@@ -199,6 +209,11 @@ export default function Register() {
         return false;
       }
 
+      if (!form.organizationCode.trim()) {
+        setError("Please enter the organization code.");
+        return false;
+      }
+
       if (!organizationVerified) {
         setError("Please verify your organization before continuing.");
         return false;
@@ -232,28 +247,72 @@ export default function Register() {
 
     try {
       /*
-       * Backend registration will be connected here.
-       *
-       * Example:
-       *
-       * await fetch("/api/auth/register", {
-       *   method: "POST",
-       *   headers: {
-       *     "Content-Type": "application/json",
-       *   },
-       *   body: JSON.stringify(form),
-       * });
+       * STEP 1
+       * Create user in Supabase Authentication.
        */
-
-      await new Promise<void>((resolve) => {
-        setTimeout(resolve, 1000);
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: form.email.trim(),
+        password: form.password,
+        options: {
+          data: {
+            full_name: form.fullName.trim(),
+            phone: form.phone.trim(),
+            country: form.country.trim(),
+            city: form.city.trim(),
+            role: form.role || "student",
+            account_type: form.accountType,
+            organization_name: form.organizationName.trim() || null,
+            organization_type: form.organizationType || null,
+            organization_code: form.organizationCode.trim() || null,
+            purposes: form.purposes,
+          },
+        },
       });
 
-      setSuccess(
-        "Your registration information is ready. Backend registration can now be connected."
-      );
-    } catch {
-      setError("Something went wrong. Please try again.");
+      if (signUpError) {
+        throw signUpError;
+      }
+
+      if (!data.user) {
+        throw new Error("Account could not be created.");
+      }
+
+      /*
+       * The profile can be created by a Supabase database trigger
+       * using auth.users metadata.
+       *
+       * Therefore we don't manually insert the password anywhere.
+       */
+
+      if (!data.session) {
+        setSuccess(
+          "Account created successfully. Please check your email to confirm your account."
+        );
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 2500);
+
+        return;
+      }
+
+      /*
+       * If email confirmation is disabled,
+       * the user gets a session immediately.
+       */
+      setSuccess("Account created successfully! Redirecting...");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1200);
+    } catch (err: unknown) {
+      console.error("Registration error:", err);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -365,6 +424,8 @@ export default function Register() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
+              {/* Full Name */}
+
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   Full name
@@ -383,6 +444,8 @@ export default function Register() {
                   />
                 </div>
               </div>
+
+              {/* Email */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -403,6 +466,8 @@ export default function Register() {
                 </div>
               </div>
 
+              {/* Phone */}
+
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   Phone number
@@ -421,6 +486,8 @@ export default function Register() {
                   />
                 </div>
               </div>
+
+              {/* Country */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -441,6 +508,8 @@ export default function Register() {
                 </div>
               </div>
 
+              {/* City */}
+
               <div>
                 <label className="mb-2 block text-sm font-semibold">
                   City
@@ -455,6 +524,8 @@ export default function Register() {
                   className="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3.5 outline-none transition focus:border-cyan-400/50"
                 />
               </div>
+
+              {/* Role */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
@@ -606,8 +677,8 @@ export default function Register() {
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500">
-                      Use the code and secret key provided by your
-                      organization administrator.
+                      Use the code and secret key provided by your organization
+                      administrator.
                     </p>
                   </div>
                 </div>
